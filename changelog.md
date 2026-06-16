@@ -1,7 +1,7 @@
 
 
 ## Roll protocol to r1646372 — _2026-06-13T05:51:22.000Z_
-######  Diff: [`838337e...61bc44d`](https://github.com/ChromeDevTools/devtools-protocol/compare/838337e...61bc44d)
+######  Diff: [`838337e...1857dd0`](https://github.com/ChromeDevTools/devtools-protocol/compare/838337e...1857dd0)
 
 ```diff
 @@ domains/Page.pdl:117 @@ domain Page
@@ -42872,20 +42872,4 @@ index 4754f17c..8dad9c98 100644
 +      # An UI representation of the address used to fill the form.
        # Consists of a 2D array where each child represents an address/profile line.
        AddressUI addressUi
-```
-
-## Roll protocol to r1193409 — _2023-09-07T04:26:24.000Z_
-######  Diff: [`7b181f3...322248d`](https://github.com/ChromeDevTools/devtools-protocol/compare/7b181f3...322248d)
-
-```diff
-@@ browser_protocol.pdl:11308 @@ experimental domain Preload
-       MixedContent
-       TriggerBackgrounded
-       MemoryLimitExceeded
--      # Prerenders can be cancelled when Chrome uses excessive memory. This is
--      # recorded when it fails to get the memory usage.
--      FailToGetMemoryUsage
-       DataSaverEnabled
-       HasEffectiveUrl
-       ActivatedBeforeStarted
 ```
