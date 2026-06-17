@@ -1,5 +1,39 @@
 
 
+## Roll protocol to r1648091 — _2026-06-17T06:06:09.000Z_
+######  Diff: [`8ac781c...fec78bf`](https://github.com/ChromeDevTools/devtools-protocol/compare/8ac781c...fec78bf)
+
+```diff
+@@ domains/CSS.pdl:82 @@ experimental domain CSS
+       # Specificity of the selector.
+       experimental optional Specificity specificity
+ 
++  # Contribution of an individual simple selector to specificity.
++  experimental type SpecificityComponent extends object
++    properties
++      # The simple selector text that contributes to specificity.
++      string text
++      # The a component contribution.
++      integer a
++      # The b component contribution.
++      integer b
++      # The c component contribution.
++      integer c
++
+   # Specificity:
+   # https://drafts.csswg.org/selectors/#specificity-rules
+   experimental type Specificity extends object
+@@ -93,6 +105,8 @@ experimental domain CSS
+       integer b
+       # The c component, which represents the number of type selectors and pseudo-elements.
+       integer c
++      # Per-simple-selector contributions used to explain this specificity.
++      experimental optional array of SpecificityComponent components
+ 
+   # Selector list data.
+   type SelectorList extends object
+```
+
 ## Roll protocol to r1646372 — _2026-06-13T05:51:22.000Z_
 ######  Diff: [`838337e...1857dd0`](https://github.com/ChromeDevTools/devtools-protocol/compare/838337e...1857dd0)
 
@@ -42849,27 +42883,4 @@ index 4754f17c..8dad9c98 100644
        optional any value
        optional string objectId
        # Set if value reference met more then once during serialization. In such
-```
-
-## Roll protocol to r1195207 — _2023-09-12T04:25:54.000Z_
-######  Diff: [`322248d...c0f98d9`](https://github.com/ChromeDevTools/devtools-protocol/compare/322248d...c0f98d9)
-
-```diff
-@@ browser_protocol.pdl:1015 @@ experimental domain Autofill
-       # fields and values defining an address.
-       array of AddressField fields
- 
--  # Defines how an address can be displayed like in chrome://settings/addresses. 
-+  # Defines how an address can be displayed like in chrome://settings/addresses.
-   # Address UI is a two dimensional array, each inner array is an "address information line", and when rendered in a UI surface should be displayed as such.
-   # The following address UI for instance:
-   # [[{name: "GIVE_NAME", value: "Jon"}, {name: "FAMILY_NAME", value: "Doe"}], [{name: "CITY", value: "Munich"}, {name: "ZIP", value: "81456"}]]
-@@ -1053,7 +1053,7 @@ experimental domain Autofill
-     parameters
-       # Information about the fields that were filled
-       array of FilledField filledFields
--      # An UI representation of the address used to fill the form. 
-+      # An UI representation of the address used to fill the form.
-       # Consists of a 2D array where each child represents an address/profile line.
-       AddressUI addressUi
 ```
