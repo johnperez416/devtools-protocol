@@ -1,7 +1,28 @@
 
 
+## Roll protocol to r1648812 — _2026-06-18T06:03:26.000Z_
+######  Diff: [`fc77610...99c77c9`](https://github.com/ChromeDevTools/devtools-protocol/compare/fc77610...99c77c9)
+
+```diff
+@@ domains/Network.pdl:738 @@ domain Network
+       None
+       # The cookie should have been blocked by 3PCD but is exempted by explicit user setting.
+       UserSetting
+-      # The cookie should have been blocked by 3PCD but is exempted by metadata mitigation.
+-      TPCDMetadata
+-      # The cookie should have been blocked by 3PCD but is exempted by Deprecation Trial mitigation.
+-      TPCDDeprecationTrial
+-      # The cookie should have been blocked by 3PCD but is exempted by Top-level Deprecation Trial mitigation.
+-      TopLevelTPCDDeprecationTrial
+-      # The cookie should have been blocked by 3PCD but is exempted by heuristics mitigation.
+-      TPCDHeuristics
+       # The cookie should have been blocked by 3PCD but is exempted by Enterprise Policy.
+       EnterprisePolicy
+       # The cookie should have been blocked by 3PCD but is exempted by Storage Access API.
+```
+
 ## Roll protocol to r1648091 — _2026-06-17T06:06:09.000Z_
-######  Diff: [`8ac781c...fec78bf`](https://github.com/ChromeDevTools/devtools-protocol/compare/8ac781c...fec78bf)
+######  Diff: [`8ac781c...fc77610`](https://github.com/ChromeDevTools/devtools-protocol/compare/8ac781c...fc77610)
 
 ```diff
 @@ domains/CSS.pdl:82 @@ experimental domain CSS
@@ -42869,18 +42890,4 @@ index 4754f17c..8dad9c98 100644
  
    # Fired when a prerender attempt is completed.
    event prerenderAttemptCompleted
-```
-
-## Roll protocol to r1195796 — _2023-09-13T04:26:23.000Z_
-######  Diff: [`c0f98d9...2fffccb`](https://github.com/ChromeDevTools/devtools-protocol/compare/c0f98d9...2fffccb)
-
-```diff
-@@ js_protocol.pdl:1066 @@ domain Runtime
-         arraybuffer
-         node
-         window
-+        generator
-       optional any value
-       optional string objectId
-       # Set if value reference met more then once during serialization. In such
 ```
