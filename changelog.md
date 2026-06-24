@@ -1,7 +1,75 @@
 
 
+## Roll protocol to r1651496 — _2026-06-24T05:48:07.000Z_
+######  Diff: [`42c3c57...d687700`](https://github.com/ChromeDevTools/devtools-protocol/compare/42c3c57...d687700)
+
+```diff
+@@ domains/Audits.pdl:604 @@ experimental domain Audits
+       JwksHttpNotFound
+       JwksInvalidResponse
+       TokenVerificationSdJwtUnsupportedHeaderAlg
++      TokenVerificationSdJwtInvalidTyp
+       TokenVerificationSdJwtMissingIss
+       TokenVerificationSdJwtMissingIat
+       TokenVerificationSdJwtMissingCnf
+diff --git a/pdl/domains/Overlay.pdl b/pdl/domains/Overlay.pdl
+index 8ef51bbb..33144933 100644
+--- a/pdl/domains/Overlay.pdl
++++ b/pdl/domains/Overlay.pdl
+@@ -208,6 +208,36 @@ experimental domain Overlay
+       # The content box highlight outline color (default: transparent).
+       optional DOM.RGBA outlineColor
+ 
++  # Supported display cutout shapes.
++  type DisplayCutoutShape extends string
++    enum
++      pill
++      notch
++      circle
++      rectangle
++
++  # Configuration for a display cutout.
++  type DisplayCutoutConfig extends object
++    properties
++      # A rectangle representing the cutout bounds.
++      DOM.Rect rect
++      # Shape used to draw the cutout.
++      DisplayCutoutShape shape
++      # Border radius for rounded cutout shapes.
++      optional integer borderRadius
++      # Upper shoulder radius for notch cutout shapes.
++      optional integer upperRadius
++      # Lower transition radius for notch cutout shapes.
++      optional integer lowerRadius
++      # Center x coordinate for circle cutout shapes.
++      optional integer cx
++      # Center y coordinate for circle cutout shapes.
++      optional integer cy
++      # Radius for circle cutout shapes.
++      optional integer radius
++      # The cutout fill color (default: black).
++      optional DOM.RGBA contentColor
++
+   # Configuration for Window Controls Overlay
+   type WindowControlsOverlayConfig extends object
+     properties
+@@ -476,6 +506,12 @@ experimental domain Overlay
+       # hinge data, null means hideHinge
+       optional HingeConfig hingeConfig
+ 
++  # Add a display cutout overlay.
++  command setShowDisplayCutout
++    parameters
++      # display cutout data, null means hide display cutout
++      optional DisplayCutoutConfig displayCutoutConfig
++
+   # Show elements in isolation mode with overlays.
+   command setShowIsolatedElements
+     parameters
+```
+
 ## Roll protocol to r1648812 — _2026-06-18T06:03:26.000Z_
-######  Diff: [`fc77610...99c77c9`](https://github.com/ChromeDevTools/devtools-protocol/compare/fc77610...99c77c9)
+######  Diff: [`fc77610...42c3c57`](https://github.com/ChromeDevTools/devtools-protocol/compare/fc77610...42c3c57)
 
 ```diff
 @@ domains/Network.pdl:738 @@ domain Network
@@ -42849,45 +42917,4 @@ index 4754f17c..8dad9c98 100644
        # The cookie was blocked by third-party cookie blocking between sites in
        # the same First-Party Set.
        ThirdPartyBlockedInFirstPartySet
-```
-
-## Roll protocol to r1196408 — _2023-09-14T04:25:59.000Z_
-######  Diff: [`2fffccb...042ec44`](https://github.com/ChromeDevTools/devtools-protocol/compare/2fffccb...042ec44)
-
-```diff
-@@ browser_protocol.pdl:2095 @@ experimental domain CSS
-       string propertyName
-       string value
- 
-+  # Modifies the property rule property name.
-+  command setPropertyRulePropertyName
-+    parameters
-+      StyleSheetId styleSheetId
-+      SourceRange range
-+      string propertyName
-+    returns
-+      # The resulting key text after modification.
-+      Value propertyName
-+
-   # Modifies the keyframe rule key text.
-   command setKeyframeKey
-     parameters
-@@ -11296,7 +11306,6 @@ experimental domain Preload
-       NavigationBadHttpStatus
-       ClientCertRequested
-       NavigationRequestNetworkError
--      MaxNumOfRunningPrerendersExceeded
-       CancelAllHostsForTesting
-       DidFailLoad
-       Stop
-@@ -11341,6 +11350,9 @@ experimental domain Preload
-       ResourceLoadBlockedByClient
-       SpeculationRuleRemoved
-       ActivatedWithAuxiliaryBrowsingContexts
-+      MaxNumOfRunningEagerPrerendersExceeded
-+      MaxNumOfRunningNonEagerPrerendersExceeded
-+      MaxNumOfRunningEmbedderPrerendersExceeded
- 
-   # Fired when a prerender attempt is completed.
-   event prerenderAttemptCompleted
 ```

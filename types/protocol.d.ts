@@ -3837,7 +3837,7 @@ export namespace Protocol {
          * Should be updated alongside EmailVerificationRequestResult in
          * third_party/blink/public/mojom/devtools/inspector_issue.mojom.
          */
-        export type EmailVerificationRequestIssueReason = ('InvalidEmail' | 'DnsFetchFailed' | 'DnsInvalidRecord' | 'WellKnownHttpNotFound' | 'WellKnownNoResponse' | 'WellKnownInvalidResponse' | 'WellKnownListEmpty' | 'WellKnownInvalidContentType' | 'WellKnownMissingIssuanceEndpoint' | 'WellKnownIssuanceEndpointCrossOrigin' | 'WellKnownUnsupportedSigningAlgorithm' | 'TokenHttpNotFound' | 'TokenNoResponse' | 'TokenInvalidResponse' | 'TokenInvalidContentType' | 'TokenMalformedSdJwt' | 'TokenInvalidSdJwt' | 'KeyBindingSigningFailed' | 'RpOriginIsOpaque' | 'WellKnownMissingAccountsEndpoint' | 'UserLoggedOut' | 'WellKnownAccountsEndpointCrossOrigin' | 'AccountsHttpNotFound' | 'AccountsNoResponse' | 'AccountsInvalidResponse' | 'AccountsInvalidContentType' | 'AccountsEmptyList' | 'EmailVerificationWellKnownHttpNotFound' | 'EmailVerificationWellKnownNoResponse' | 'EmailVerificationWellKnownInvalidResponse' | 'EmailVerificationWellKnownInvalidContentType' | 'JwksHttpNotFound' | 'JwksInvalidResponse' | 'TokenVerificationSdJwtUnsupportedHeaderAlg' | 'TokenVerificationSdJwtMissingIss' | 'TokenVerificationSdJwtMissingIat' | 'TokenVerificationSdJwtMissingCnf' | 'TokenVerificationSdJwtMissingEmail' | 'TokenVerificationSdJwtInvalidIssuedAt' | 'TokenVerificationSdJwtInvalidIssuer' | 'TokenVerificationSdJwtJwksMissingKeys' | 'TokenVerificationSdJwtSignatureFailed' | 'TokenVerificationSdJwtInvalidEmailVerified' | 'TokenVerificationSdJwtInvalidEmail' | 'TokenVerificationSdJwtInvalidHolderKey' | 'TokenVerificationKbInvalidTyp' | 'TokenVerificationKbMissingAud' | 'TokenVerificationKbMissingNonce' | 'TokenVerificationKbMissingIat' | 'TokenVerificationKbMissingSdHash' | 'TokenVerificationKbInvalidIssuedAt' | 'TokenVerificationKbInvalidAudience' | 'TokenVerificationKbInvalidNonce' | 'TokenVerificationKbInvalidSdHash' | 'TokenVerificationKbMissingCnf' | 'TokenVerificationKbSignatureFailed');
+        export type EmailVerificationRequestIssueReason = ('InvalidEmail' | 'DnsFetchFailed' | 'DnsInvalidRecord' | 'WellKnownHttpNotFound' | 'WellKnownNoResponse' | 'WellKnownInvalidResponse' | 'WellKnownListEmpty' | 'WellKnownInvalidContentType' | 'WellKnownMissingIssuanceEndpoint' | 'WellKnownIssuanceEndpointCrossOrigin' | 'WellKnownUnsupportedSigningAlgorithm' | 'TokenHttpNotFound' | 'TokenNoResponse' | 'TokenInvalidResponse' | 'TokenInvalidContentType' | 'TokenMalformedSdJwt' | 'TokenInvalidSdJwt' | 'KeyBindingSigningFailed' | 'RpOriginIsOpaque' | 'WellKnownMissingAccountsEndpoint' | 'UserLoggedOut' | 'WellKnownAccountsEndpointCrossOrigin' | 'AccountsHttpNotFound' | 'AccountsNoResponse' | 'AccountsInvalidResponse' | 'AccountsInvalidContentType' | 'AccountsEmptyList' | 'EmailVerificationWellKnownHttpNotFound' | 'EmailVerificationWellKnownNoResponse' | 'EmailVerificationWellKnownInvalidResponse' | 'EmailVerificationWellKnownInvalidContentType' | 'JwksHttpNotFound' | 'JwksInvalidResponse' | 'TokenVerificationSdJwtUnsupportedHeaderAlg' | 'TokenVerificationSdJwtInvalidTyp' | 'TokenVerificationSdJwtMissingIss' | 'TokenVerificationSdJwtMissingIat' | 'TokenVerificationSdJwtMissingCnf' | 'TokenVerificationSdJwtMissingEmail' | 'TokenVerificationSdJwtInvalidIssuedAt' | 'TokenVerificationSdJwtInvalidIssuer' | 'TokenVerificationSdJwtJwksMissingKeys' | 'TokenVerificationSdJwtSignatureFailed' | 'TokenVerificationSdJwtInvalidEmailVerified' | 'TokenVerificationSdJwtInvalidEmail' | 'TokenVerificationSdJwtInvalidHolderKey' | 'TokenVerificationKbInvalidTyp' | 'TokenVerificationKbMissingAud' | 'TokenVerificationKbMissingNonce' | 'TokenVerificationKbMissingIat' | 'TokenVerificationKbMissingSdHash' | 'TokenVerificationKbInvalidIssuedAt' | 'TokenVerificationKbInvalidAudience' | 'TokenVerificationKbInvalidNonce' | 'TokenVerificationKbInvalidSdHash' | 'TokenVerificationKbMissingCnf' | 'TokenVerificationKbSignatureFailed');
 
         /**
          * This issue tracks client hints related issues. It's used to deprecate old
@@ -16103,6 +16103,53 @@ export namespace Protocol {
         }
 
         /**
+         * Supported display cutout shapes.
+         */
+        export type DisplayCutoutShape = ('pill' | 'notch' | 'circle' | 'rectangle');
+
+        /**
+         * Configuration for a display cutout.
+         */
+        export interface DisplayCutoutConfig {
+            /**
+             * A rectangle representing the cutout bounds.
+             */
+            rect: DOM.Rect;
+            /**
+             * Shape used to draw the cutout.
+             */
+            shape: DisplayCutoutShape;
+            /**
+             * Border radius for rounded cutout shapes.
+             */
+            borderRadius?: integer;
+            /**
+             * Upper shoulder radius for notch cutout shapes.
+             */
+            upperRadius?: integer;
+            /**
+             * Lower transition radius for notch cutout shapes.
+             */
+            lowerRadius?: integer;
+            /**
+             * Center x coordinate for circle cutout shapes.
+             */
+            cx?: integer;
+            /**
+             * Center y coordinate for circle cutout shapes.
+             */
+            cy?: integer;
+            /**
+             * Radius for circle cutout shapes.
+             */
+            radius?: integer;
+            /**
+             * The cutout fill color (default: black).
+             */
+            contentColor?: DOM.RGBA;
+        }
+
+        /**
          * Configuration for Window Controls Overlay
          */
         export interface WindowControlsOverlayConfig {
@@ -16457,6 +16504,13 @@ export namespace Protocol {
              * hinge data, null means hideHinge
              */
             hingeConfig?: HingeConfig;
+        }
+
+        export interface SetShowDisplayCutoutRequest {
+            /**
+             * display cutout data, null means hide display cutout
+             */
+            displayCutoutConfig?: DisplayCutoutConfig;
         }
 
         export interface SetShowIsolatedElementsRequest {
