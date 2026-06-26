@@ -3125,6 +3125,29 @@ export namespace Protocol {
     export namespace Ads {
 
         /**
+         * Ad frame data.
+         */
+        export interface AdFrameData {
+            /**
+             * The DevTools frame token.
+             */
+            frameId: Page.FrameId;
+            /**
+             * The initial origin of the frame. To minimize the payload size, this is
+             * only sent once per frame.
+             */
+            initialOrigin?: string;
+            /**
+             * The network bytes of the frame.
+             */
+            networkBytes: number;
+            /**
+             * The CPU time of the frame, in milliseconds.
+             */
+            cpuTime: number;
+        }
+
+        /**
          * Ad metrics for a page.
          */
         export interface AdMetrics {
@@ -3155,6 +3178,14 @@ export namespace Protocol {
              * The total ad network bytes.
              */
             totalAdNetworkBytes: number;
+            /**
+             * The list of ad frames that have been updated since the last event.
+             */
+            updateAdFrames: AdFrameData[];
+            /**
+             * The list of ad frame IDs that have been removed since the last event.
+             */
+            removeAdFrames: Page.FrameId[];
         }
 
         export interface GetAdMetricsResponse {
@@ -7020,7 +7051,7 @@ export namespace Protocol {
         /**
          * Pseudo element type.
          */
-        export type PseudoType = ('first-line' | 'first-letter' | 'checkmark' | 'before' | 'after' | 'expand-icon' | 'picker-icon' | 'interest-button' | 'marker' | 'backdrop' | 'column' | 'selection' | 'search-text' | 'target-text' | 'spelling-error' | 'grammar-error' | 'highlight' | 'first-line-inherited' | 'scroll-marker' | 'scroll-marker-group' | 'scroll-button' | 'scrollbar' | 'scrollbar-thumb' | 'scrollbar-button' | 'scrollbar-track' | 'scrollbar-track-piece' | 'scrollbar-corner' | 'resizer' | 'input-list-button' | 'view-transition' | 'view-transition-group' | 'view-transition-image-pair' | 'view-transition-group-children' | 'view-transition-old' | 'view-transition-new' | 'placeholder' | 'file-selector-button' | 'details-content' | 'picker' | 'permission-icon' | 'overscroll-area-parent' | 'skeleton');
+        export type PseudoType = ('first-line' | 'first-letter' | 'checkmark' | 'before' | 'after' | 'expand-icon' | 'picker-icon' | 'interest-button' | 'marker' | 'backdrop' | 'column' | 'selection' | 'search-text' | 'target-text' | 'spelling-error' | 'grammar-error' | 'highlight' | 'first-line-inherited' | 'scroll-marker' | 'scroll-marker-group' | 'scroll-button' | 'scrollbar' | 'scrollbar-thumb' | 'scrollbar-button' | 'scrollbar-track' | 'scrollbar-track-piece' | 'scrollbar-corner' | 'resizer' | 'input-list-button' | 'view-transition' | 'view-transition-group' | 'view-transition-image-pair' | 'view-transition-group-children' | 'view-transition-old' | 'view-transition-new' | 'placeholder' | 'file-selector-button' | 'details-content' | 'picker' | 'select-listbox' | 'permission-icon' | 'overscroll-area-parent' | 'overscroll-backdrop' | 'skeleton');
 
         /**
          * Shadow root type.
@@ -17645,6 +17676,15 @@ export namespace Protocol {
              * option, use with caution.
              */
             grantUniveralAccess?: boolean;
+            /**
+             * An optional content security policy to set for the isolated world.
+             * If omitted, any existing CSP for the world will be cleared.
+             * Note that clearing or updating the CSP does not immediately affect the active
+             * context in the same document because LocalDOMWindow caches the
+             * ContentSecurityPolicy object. The change takes effect on subsequent
+             * navigations when a new window context is created.
+             */
+            contentSecurityPolicy?: string;
         }
 
         export interface CreateIsolatedWorldResponse {
@@ -21147,13 +21187,11 @@ export namespace Protocol {
              */
             hidden?: boolean;
             /**
-             * If specified, the option is used to determine if the new target should
-             * be focused or not. By default, the focus behavior depends on the
-             * value of the background field. For example, background=false and focus=false
-             * will result in the target tab being opened but the browser window remain
-             * unchanged (if it was in the background, it will remain in the background)
-             * and background=false with focus=undefined will result in the window being focused.
-             * Using background: true and focus: true is not supported and will result in an error.
+             * If specified, determines whether the new target should be focused.
+             * By default, the focus behavior depends on the `background` parameter:
+             * - If `background` is false (default) and `focus` is omitted, the new target is focused and the browser window is brought to the foreground.
+             * - If `background` is false and `focus` is false, the target is opened but the browser window's focus remains unchanged (e.g., if the window was in the background, it stays there).
+             * - If `background` is true, setting `focus` to true is not supported and will result in an error.
              * @experimental
              */
             focus?: boolean;
@@ -21622,6 +21660,23 @@ export namespace Protocol {
              * @experimental
              */
             tracingBackend?: TracingBackend;
+            /**
+             * Maximum width and height (in pixels) of each captured screenshot.
+             * Only used when the `disabled-by-default-devtools.screenshot` category is
+             * enabled. Defaults to 500. The combined memory footprint of screenshots
+             * (`screenshotMaxSize` * `screenshotMaxSize` * 4 * `screenshotMaxCount`)
+             * is clamped to the existing per-session budget.
+             * @experimental
+             */
+            screenshotMaxSize?: integer;
+            /**
+             * Maximum number of screenshots captured during a single tracing session.
+             * Only used when the `disabled-by-default-devtools.screenshot` category is
+             * enabled. Defaults to 450. Clamped together with `screenshotMaxSize` to
+             * stay within the per-session screenshot memory budget.
+             * @experimental
+             */
+            screenshotMaxCount?: integer;
         }
 
         /**

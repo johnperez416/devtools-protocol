@@ -1,7 +1,122 @@
 
 
+## Roll protocol to r1652909 — _2026-06-26T05:49:04.000Z_
+######  Diff: [`ebe045b...07fa128`](https://github.com/ChromeDevTools/devtools-protocol/compare/ebe045b...07fa128)
+
+```diff
+@@ domains/Ads.pdl:8 @@ experimental domain Ads
+   depends on Page
+   depends on Runtime
+ 
++  # Ad frame data.
++  type AdFrameData extends object
++    properties
++      # The DevTools frame token.
++      Page.FrameId frameId
++      # The initial origin of the frame. To minimize the payload size, this is
++      # only sent once per frame.
++      optional string initialOrigin
++      # The network bytes of the frame.
++      number networkBytes
++      # The CPU time of the frame, in milliseconds.
++      number cpuTime
++
+   # Ad metrics for a page.
+   type AdMetrics extends object
+     properties
+@@ -26,6 +39,10 @@ experimental domain Ads
+       number totalAdCpuTime
+       # The total ad network bytes.
+       number totalAdNetworkBytes
++      # The list of ad frames that have been updated since the last event.
++      array of AdFrameData updateAdFrames
++      # The list of ad frame IDs that have been removed since the last event.
++      array of Page.FrameId removeAdFrames
+ 
+   # Retrieves ad metrics for the current page.
+   command getAdMetrics
+diff --git a/pdl/domains/DOM.pdl b/pdl/domains/DOM.pdl
+index 40e65bca..76ea8ee3 100644
+--- a/pdl/domains/DOM.pdl
++++ b/pdl/domains/DOM.pdl
+@@ -76,8 +76,10 @@ domain DOM
+       file-selector-button
+       details-content
+       picker
++      select-listbox
+       permission-icon
+       overscroll-area-parent
++      overscroll-backdrop
+       skeleton
+ 
+   # Shadow root type.
+diff --git a/pdl/domains/Page.pdl b/pdl/domains/Page.pdl
+index ecde9ae4..414867f5 100644
+--- a/pdl/domains/Page.pdl
++++ b/pdl/domains/Page.pdl
+@@ -640,6 +640,13 @@ domain Page
+       # Whether or not universal access should be granted to the isolated world. This is a powerful
+       # option, use with caution.
+       optional boolean grantUniveralAccess
++      # An optional content security policy to set for the isolated world.
++      # If omitted, any existing CSP for the world will be cleared.
++      # Note that clearing or updating the CSP does not immediately affect the active
++      # context in the same document because LocalDOMWindow caches the
++      # ContentSecurityPolicy object. The change takes effect on subsequent
++      # navigations when a new window context is created.
++      optional string contentSecurityPolicy
+     returns
+       # Execution context of the isolated world.
+       Runtime.ExecutionContextId executionContextId
+diff --git a/pdl/domains/Target.pdl b/pdl/domains/Target.pdl
+index 1783c582..222ac760 100644
+--- a/pdl/domains/Target.pdl
++++ b/pdl/domains/Target.pdl
+@@ -173,13 +173,11 @@ domain Target
+       # present in the tab UI strip. Cannot be created with `forTab: true`, `newWindow: true` or
+       # `background: false`. The life-time of the tab is limited to the life-time of the session.
+       experimental optional boolean hidden
+-      # If specified, the option is used to determine if the new target should
+-      # be focused or not. By default, the focus behavior depends on the
+-      # value of the background field. For example, background=false and focus=false
+-      # will result in the target tab being opened but the browser window remain
+-      # unchanged (if it was in the background, it will remain in the background)
+-      # and background=false with focus=undefined will result in the window being focused.
+-      # Using background: true and focus: true is not supported and will result in an error.
++      # If specified, determines whether the new target should be focused.
++      # By default, the focus behavior depends on the `background` parameter:
++      # - If `background` is false (default) and `focus` is omitted, the new target is focused and the browser window is brought to the foreground.
++      # - If `background` is false and `focus` is false, the target is opened but the browser window's focus remains unchanged (e.g., if the window was in the background, it stays there).
++      # - If `background` is true, setting `focus` to true is not supported and will result in an error.
+       experimental optional boolean focus
+     returns
+       # The id of the page opened.
+diff --git a/pdl/domains/Tracing.pdl b/pdl/domains/Tracing.pdl
+index 5103577e..d070f3a9 100644
+--- a/pdl/domains/Tracing.pdl
++++ b/pdl/domains/Tracing.pdl
+@@ -130,6 +130,17 @@ domain Tracing
+       experimental optional binary perfettoConfig
+       # Backend type (defaults to `auto`)
+       experimental optional TracingBackend tracingBackend
++      # Maximum width and height (in pixels) of each captured screenshot.
++      # Only used when the `disabled-by-default-devtools.screenshot` category is
++      # enabled. Defaults to 500. The combined memory footprint of screenshots
++      # (`screenshotMaxSize` * `screenshotMaxSize` * 4 * `screenshotMaxCount`)
++      # is clamped to the existing per-session budget.
++      experimental optional integer screenshotMaxSize
++      # Maximum number of screenshots captured during a single tracing session.
++      # Only used when the `disabled-by-default-devtools.screenshot` category is
++      # enabled. Defaults to 450. Clamped together with `screenshotMaxSize` to
++      # stay within the per-session screenshot memory budget.
++      experimental optional integer screenshotMaxCount
+ 
+   experimental event bufferUsage
+     parameters
+```
+
 ## Roll protocol to r1651496 — _2026-06-24T05:48:07.000Z_
-######  Diff: [`42c3c57...d687700`](https://github.com/ChromeDevTools/devtools-protocol/compare/42c3c57...d687700)
+######  Diff: [`42c3c57...ebe045b`](https://github.com/ChromeDevTools/devtools-protocol/compare/42c3c57...ebe045b)
 
 ```diff
 @@ domains/Audits.pdl:604 @@ experimental domain Audits
@@ -42884,37 +42999,4 @@ index 4754f17c..8dad9c98 100644
  
    # Fired when a prerender attempt is completed.
    event prerenderAttemptCompleted
-```
-
-## Roll protocol to r1198794 — _2023-09-20T04:26:33.000Z_
-######  Diff: [`042ec44...4c3c454`](https://github.com/ChromeDevTools/devtools-protocol/compare/042ec44...4c3c454)
-
-```diff
-@@ browser_protocol.pdl:5736 @@ domain Network
-       SameSiteNoneInsecure
-       # The cookie was not stored due to user preferences.
-       UserPreferences
-+      # The cookie was blocked due to third-party cookie phaseout.
-+      ThirdPartyPhaseout
-       # The cookie was blocked by third-party cookie blocking between sites in
-       # the same First-Party Set.
-       ThirdPartyBlockedInFirstPartySet
-@@ -5781,6 +5783,8 @@ domain Network
-       # character if it appears in the middle of the cookie name, value, an
-       # attribute name, or an attribute value.
-       DisallowedCharacter
-+      # Cookie contains no content or only whitespace.
-+      NoCookieContent
- 
-   # Types of reasons why a cookie may not be sent with a request.
-   experimental type CookieBlockedReason extends string
-@@ -5807,6 +5811,8 @@ domain Network
-       SameSiteNoneInsecure
-       # The cookie was not sent due to user preferences.
-       UserPreferences
-+      # The cookie was blocked due to third-party cookie phaseout.
-+      ThirdPartyPhaseout
-       # The cookie was blocked by third-party cookie blocking between sites in
-       # the same First-Party Set.
-       ThirdPartyBlockedInFirstPartySet
 ```
