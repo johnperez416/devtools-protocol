@@ -1,7 +1,7 @@
 
 
 ## Roll protocol to r1652909 — _2026-06-26T05:49:04.000Z_
-######  Diff: [`ebe045b...07fa128`](https://github.com/ChromeDevTools/devtools-protocol/compare/ebe045b...07fa128)
+######  Diff: [`ebe045b...888fb74`](https://github.com/ChromeDevTools/devtools-protocol/compare/ebe045b...888fb74)
 
 ```diff
 @@ domains/Ads.pdl:8 @@ experimental domain Ads
@@ -42974,29 +42974,4 @@ index 4754f17c..8dad9c98 100644
  
    # Ad advertising element inside an interest group.
    type InterestGroupAd extends object
-```
-
-## Roll protocol to r1199410 — _2023-09-21T04:26:11.000Z_
-######  Diff: [`4c3c454...bef1c5e`](https://github.com/ChromeDevTools/devtools-protocol/compare/4c3c454...bef1c5e)
-
-```diff
-@@ browser_protocol.pdl:11324 @@ experimental domain Preload
-       TriggerBackgrounded
-       MemoryLimitExceeded
-       DataSaverEnabled
--      HasEffectiveUrl
-+      TriggerUrlHasEffectiveUrl
-       ActivatedBeforeStarted
-       InactivePageRestriction
-       StartFailed
-@@ -11359,6 +11359,9 @@ experimental domain Preload
-       MaxNumOfRunningEagerPrerendersExceeded
-       MaxNumOfRunningNonEagerPrerendersExceeded
-       MaxNumOfRunningEmbedderPrerendersExceeded
-+      PrerenderingUrlHasEffectiveUrl
-+      RedirectedPrerenderingUrlHasEffectiveUrl
-+      ActivationUrlHasEffectiveUrl
- 
-   # Fired when a prerender attempt is completed.
-   event prerenderAttemptCompleted
 ```
