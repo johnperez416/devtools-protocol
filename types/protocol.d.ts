@@ -3974,7 +3974,7 @@ export namespace Protocol {
             sourceCodeLocation?: SourceCodeLocation;
         }
 
-        export type PermissionElementIssueType = ('InvalidType' | 'FencedFrameDisallowed' | 'CspFrameAncestorsMissing' | 'PermissionsPolicyBlocked' | 'PaddingRightUnsupported' | 'PaddingBottomUnsupported' | 'InsetBoxShadowUnsupported' | 'RequestInProgress' | 'UntrustedEvent' | 'RegistrationFailed' | 'TypeNotSupported' | 'InvalidTypeActivation' | 'SecurityChecksFailed' | 'ActivationDisabled' | 'GeolocationDeprecated' | 'InvalidDisplayStyle' | 'NonOpaqueColor' | 'LowContrast' | 'FontSizeTooSmall' | 'FontSizeTooLarge' | 'InvalidSizeValue');
+        export type PermissionElementIssueType = ('InvalidType' | 'FencedFrameDisallowed' | 'CspFrameAncestorsMissing' | 'PermissionsPolicyBlocked' | 'PaddingRightUnsupported' | 'PaddingBottomUnsupported' | 'InsetBoxShadowUnsupported' | 'RequestInProgress' | 'UntrustedEvent' | 'RegistrationFailed' | 'TypeNotSupported' | 'InvalidTypeActivation' | 'SecurityChecksFailed' | 'ActivationDisabled' | 'GeolocationDeprecated' | 'InvalidDisplayStyle' | 'NonOpaqueColor' | 'LowContrast' | 'FontSizeTooSmall' | 'FontSizeTooLarge' | 'InvalidSizeValue' | 'NonSecureContext' | 'MissingTransientUserActivation');
 
         /**
          * This issue warns about improper usage of the <permission> element.
