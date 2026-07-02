@@ -9234,6 +9234,35 @@ export namespace Protocol {
     }
 
     /**
+     * This domain allows interacting with the Digital Credentials API for automation.
+     * @experimental
+     */
+    export namespace DigitalCredentials {
+
+        /**
+         * The type of virtual wallet action.
+         */
+        export type VirtualWalletBehavior = ('respond' | 'decline' | 'wait' | 'clear');
+
+        export interface SetVirtualWalletBehaviorRequest {
+            /**
+             * The behavior of the virtual wallet.
+             */
+            behavior: VirtualWalletBehavior;
+            /**
+             * The protocol identifier (e.g. "openid4vp"). Required when |behavior| is
+             * "respond", forbidden otherwise.
+             */
+            protocol?: string;
+            /**
+             * The response data object returned by the wallet.
+             * Required when |behavior| is "respond", forbidden otherwise.
+             */
+            response?: any;
+        }
+    }
+
+    /**
      * This domain emulates different environments for the page.
      */
     export namespace Emulation {
@@ -14144,7 +14173,7 @@ export namespace Protocol {
          * A fetch result for a device bound session creation or refresh.
          * @experimental
          */
-        export type DeviceBoundSessionFetchResult = ('Success' | 'KeyError' | 'SigningError' | 'TransientSigningError' | 'ServerRequestedTermination' | 'InvalidSessionId' | 'InvalidChallenge' | 'TooManyChallenges' | 'InvalidFetcherUrl' | 'InvalidRefreshUrl' | 'TransientHttpError' | 'ScopeOriginSameSiteMismatch' | 'RefreshUrlSameSiteMismatch' | 'MismatchedSessionId' | 'MissingScope' | 'NoCredentials' | 'SubdomainRegistrationWellKnownUnavailable' | 'SubdomainRegistrationUnauthorized' | 'SubdomainRegistrationWellKnownMalformed' | 'SessionProviderWellKnownUnavailable' | 'RelyingPartyWellKnownUnavailable' | 'FederatedKeyThumbprintMismatch' | 'InvalidFederatedSessionUrl' | 'InvalidFederatedKey' | 'TooManyRelyingOriginLabels' | 'BoundCookieSetForbidden' | 'NetError' | 'ProxyError' | 'EmptySessionConfig' | 'InvalidCredentialsConfig' | 'InvalidCredentialsType' | 'InvalidCredentialsEmptyName' | 'InvalidCredentialsCookie' | 'PersistentHttpError' | 'RegistrationAttemptedChallenge' | 'InvalidScopeOrigin' | 'ScopeOriginContainsPath' | 'RefreshInitiatorNotString' | 'RefreshInitiatorInvalidHostPattern' | 'InvalidScopeSpecification' | 'MissingScopeSpecificationType' | 'EmptyScopeSpecificationDomain' | 'EmptyScopeSpecificationPath' | 'InvalidScopeSpecificationType' | 'InvalidScopeIncludeSite' | 'MissingScopeIncludeSite' | 'FederatedNotAuthorizedByProvider' | 'FederatedNotAuthorizedByRelyingParty' | 'SessionProviderWellKnownMalformed' | 'SessionProviderWellKnownHasProviderOrigin' | 'RelyingPartyWellKnownMalformed' | 'RelyingPartyWellKnownHasRelyingOrigins' | 'InvalidFederatedSessionProviderSessionMissing' | 'InvalidFederatedSessionWrongProviderOrigin' | 'InvalidCredentialsCookieCreationTime' | 'InvalidCredentialsCookieName' | 'InvalidCredentialsCookieParsing' | 'InvalidCredentialsCookieUnpermittedAttribute' | 'InvalidCredentialsCookieInvalidDomain' | 'InvalidCredentialsCookiePrefix' | 'InvalidScopeRulePath' | 'InvalidScopeRuleHostPattern' | 'ScopeRuleOriginScopedHostPatternMismatch' | 'ScopeRuleSiteScopedHostPatternMismatch' | 'SigningQuotaExceeded' | 'InvalidConfigJson' | 'InvalidFederatedSessionProviderFailedToRestoreKey' | 'FailedToUnwrapKey' | 'SessionDeletedDuringRefresh' | 'CrossOriginRegistrationSiteNotIncluded');
+        export type DeviceBoundSessionFetchResult = ('Success' | 'SigningKeyGenerationError' | 'AttestationKeyGenerationError' | 'SigningError' | 'TransientSigningError' | 'ServerRequestedTermination' | 'InvalidSessionId' | 'InvalidChallenge' | 'TooManyChallenges' | 'InvalidFetcherUrl' | 'InvalidRefreshUrl' | 'TransientHttpError' | 'ScopeOriginSameSiteMismatch' | 'RefreshUrlSameSiteMismatch' | 'MismatchedSessionId' | 'MissingScope' | 'NoCredentials' | 'SubdomainRegistrationWellKnownUnavailable' | 'SubdomainRegistrationUnauthorized' | 'SubdomainRegistrationWellKnownMalformed' | 'SessionProviderWellKnownUnavailable' | 'RelyingPartyWellKnownUnavailable' | 'FederatedKeyThumbprintMismatch' | 'InvalidFederatedSessionUrl' | 'InvalidFederatedKey' | 'TooManyRelyingOriginLabels' | 'BoundCookieSetForbidden' | 'NetError' | 'ProxyError' | 'EmptySessionConfig' | 'InvalidCredentialsConfig' | 'InvalidCredentialsType' | 'InvalidCredentialsEmptyName' | 'InvalidCredentialsCookie' | 'PersistentHttpError' | 'RegistrationAttemptedChallenge' | 'InvalidScopeOrigin' | 'ScopeOriginContainsPath' | 'RefreshInitiatorNotString' | 'RefreshInitiatorInvalidHostPattern' | 'InvalidScopeSpecification' | 'MissingScopeSpecificationType' | 'EmptyScopeSpecificationDomain' | 'EmptyScopeSpecificationPath' | 'InvalidScopeSpecificationType' | 'InvalidScopeIncludeSite' | 'MissingScopeIncludeSite' | 'FederatedNotAuthorizedByProvider' | 'FederatedNotAuthorizedByRelyingParty' | 'SessionProviderWellKnownMalformed' | 'SessionProviderWellKnownHasProviderOrigin' | 'RelyingPartyWellKnownMalformed' | 'RelyingPartyWellKnownHasRelyingOrigins' | 'InvalidFederatedSessionProviderSessionMissing' | 'InvalidFederatedSessionWrongProviderOrigin' | 'InvalidCredentialsCookieCreationTime' | 'InvalidCredentialsCookieName' | 'InvalidCredentialsCookieParsing' | 'InvalidCredentialsCookieUnpermittedAttribute' | 'InvalidCredentialsCookieInvalidDomain' | 'InvalidCredentialsCookiePrefix' | 'InvalidScopeRulePath' | 'InvalidScopeRuleHostPattern' | 'ScopeRuleOriginScopedHostPatternMismatch' | 'ScopeRuleSiteScopedHostPatternMismatch' | 'SigningQuotaExceeded' | 'InvalidConfigJson' | 'InvalidFederatedSessionProviderFailedToRestoreKey' | 'FailedToUnwrapKey' | 'SessionDeletedDuringRefresh' | 'CrossOriginRegistrationSiteNotIncluded');
 
         /**
          * Details about a failed device bound session network request.

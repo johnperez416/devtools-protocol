@@ -1,7 +1,81 @@
 
 
+## Roll protocol to r1655900 — _2026-07-02T05:43:39.000Z_
+######  Diff: [`5b82e41...8c28b8c`](https://github.com/ChromeDevTools/devtools-protocol/compare/5b82e41...8c28b8c)
+
+```diff
+@@ browser_protocol.pdl:26 @@ include domains/DOMSnapshot.pdl
+ include domains/DOMStorage.pdl
+ include domains/DeviceAccess.pdl
+ include domains/DeviceOrientation.pdl
++include domains/DigitalCredentials.pdl
+ include domains/Emulation.pdl
+ include domains/EventBreakpoints.pdl
+ include domains/Extensions.pdl
+diff --git a/pdl/domains/DigitalCredentials.pdl b/pdl/domains/DigitalCredentials.pdl
+new file mode 100644
+index 00000000..0ace20a0
+--- /dev/null
++++ b/pdl/domains/DigitalCredentials.pdl
+@@ -0,0 +1,28 @@
++# Copyright 2026 The Chromium Authors
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++#
++# Contributing to Chrome DevTools Protocol: https://goo.gle/devtools-contribution-guide-cdp
++
++# This domain allows interacting with the Digital Credentials API for automation.
++experimental domain DigitalCredentials
++  # The type of virtual wallet action.
++  type VirtualWalletBehavior extends string
++    enum
++      respond
++      decline
++      wait
++      clear
++
++  # Sets the behavior of the virtual wallet for digital credential requests
++  # issued from this frame.
++  command setVirtualWalletBehavior
++    parameters
++      # The behavior of the virtual wallet.
++      VirtualWalletBehavior behavior
++      # The protocol identifier (e.g. "openid4vp"). Required when |behavior| is
++      # "respond", forbidden otherwise.
++      optional string protocol
++      # The response data object returned by the wallet.
++      # Required when |behavior| is "respond", forbidden otherwise.
++      optional object response
+diff --git a/pdl/domains/Network.pdl b/pdl/domains/Network.pdl
+index 7a54d715..e535e5bf 100644
+--- a/pdl/domains/Network.pdl
++++ b/pdl/domains/Network.pdl
+@@ -2149,10 +2149,12 @@ domain Network
+   experimental type DeviceBoundSessionEventId extends string
+ 
+   # A fetch result for a device bound session creation or refresh.
++  # LINT.IfChange(DeviceBoundSessionFetchResult)
+   experimental type DeviceBoundSessionFetchResult extends string
+     enum
+       Success
+-      KeyError
++      SigningKeyGenerationError
++      AttestationKeyGenerationError
+       SigningError
+       TransientSigningError
+       ServerRequestedTermination
+@@ -2221,6 +2223,7 @@ domain Network
+       FailedToUnwrapKey
+       SessionDeletedDuringRefresh
+       CrossOriginRegistrationSiteNotIncluded
++  # LINT.ThenChange(//content/browser/devtools/protocol/network_handler.cc:DeviceBoundSessionFetchResult)
+ 
+   # Details about a failed device bound session network request.
+   experimental type DeviceBoundSessionFailedRequest extends object
+```
+
 ## Roll protocol to r1654583 — _2026-06-30T05:49:23.000Z_
-######  Diff: [`3c5658b...91d9481`](https://github.com/ChromeDevTools/devtools-protocol/compare/3c5658b...91d9481)
+######  Diff: [`3c5658b...5b82e41`](https://github.com/ChromeDevTools/devtools-protocol/compare/3c5658b...5b82e41)
 
 ```diff
 @@ domains/Audits.pdl:743 @@ experimental domain Audits
@@ -42867,70 +42941,4 @@ index 4754f17c..8dad9c98 100644
    # Fired when a preload enabled state is updated.
    event preloadEnabledStateUpdated
      parameters
-```
-
-## Roll protocol to r1202299 — _2023-09-28T04:26:18.000Z_
-######  Diff: [`89ab493...e3feaa6`](https://github.com/ChromeDevTools/devtools-protocol/compare/89ab493...e3feaa6)
-
-```diff
-@@ js_protocol.pdl:1014 @@ domain Runtime
-   # Unique script identifier.
-   type ScriptId extends string
- 
--  # Represents options for serialization. Overrides `generatePreview`, `returnByValue` and
--  # `generateWebDriverValue`.
-+  # Represents options for serialization. Overrides `generatePreview` and `returnByValue`.
-   type SerializationOptions extends object
-     properties
-       enum serialization
-@@ -1027,8 +1026,7 @@ domain Runtime
-         # `returnByValue: true`. Overrides `returnByValue`.
-         json
-         # Only remote object id is put in the result. Same bahaviour as if no
--        # `serializationOptions`, `generatePreview`, `returnByValue` nor `generateWebDriverValue`
--        # are provided.
-+        # `serializationOptions`, `generatePreview` nor `returnByValue` are provided.
-         idOnly
- 
-       # Deep serialization depth. Default is full depth. Respected only in `deep` serialization mode.
-@@ -1126,8 +1124,6 @@ domain Runtime
-       optional UnserializableValue unserializableValue
-       # String representation of the object.
-       optional string description
--      # Deprecated. Use `deepSerializedValue` instead. WebDriver BiDi representation of the value.
--      deprecated optional DeepSerializedValue webDriverValue
-       # Deep serialized value.
-       experimental optional DeepSerializedValue deepSerializedValue
-       # Unique object identifier (for non-primitive values).
-@@ -1443,13 +1439,8 @@ domain Runtime
-       # boundaries).
-       # This is mutually exclusive with `executionContextId`.
-       experimental optional string uniqueContextId
--      # Deprecated. Use `serializationOptions: {serialization:"deep"}` instead.
--      # Whether the result should contain `webDriverValue`, serialized according to
--      # https://w3c.github.io/webdriver-bidi. This is mutually exclusive with `returnByValue`, but
--      # resulting `objectId` is still provided.
--      deprecated optional boolean generateWebDriverValue
-       # Specifies the result serialization. If provided, overrides
--      # `generatePreview`, `returnByValue` and `generateWebDriverValue`.
-+      # `generatePreview` and `returnByValue`.
-       experimental optional SerializationOptions serializationOptions
- 
-     returns
-@@ -1537,14 +1528,8 @@ domain Runtime
-       # boundaries).
-       # This is mutually exclusive with `contextId`.
-       experimental optional string uniqueContextId
--      # Deprecated. Use `serializationOptions: {serialization:"deep"}` instead.
--      # Whether the result should contain `webDriverValue`, serialized
--      # according to
--      # https://w3c.github.io/webdriver-bidi. This is mutually exclusive with `returnByValue`, but
--      # resulting `objectId` is still provided.
--      deprecated optional boolean generateWebDriverValue
-       # Specifies the result serialization. If provided, overrides
--      # `generatePreview`, `returnByValue` and `generateWebDriverValue`.
-+      # `generatePreview` and `returnByValue`.
-       experimental optional SerializationOptions serializationOptions
-     returns
-       # Evaluation result.
 ```

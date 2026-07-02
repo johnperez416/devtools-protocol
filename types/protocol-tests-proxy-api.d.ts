@@ -62,6 +62,8 @@ export namespace ProtocolTestsProxyApi {
 
         DeviceOrientation: DeviceOrientationApi;
 
+        DigitalCredentials: DigitalCredentialsApi;
+
         Emulation: EmulationApi;
 
         EventBreakpoints: EventBreakpointsApi;
@@ -2264,6 +2266,15 @@ export namespace ProtocolTestsProxyApi {
          * Overrides the Device Orientation.
          */
         setDeviceOrientationOverride(params: Protocol.DeviceOrientation.SetDeviceOrientationOverrideRequest): Promise<{id: number, result: void, sessionId: string}>;
+
+    }
+
+    export interface DigitalCredentialsApi {
+        /**
+         * Sets the behavior of the virtual wallet for digital credential requests
+         * issued from this frame.
+         */
+        setVirtualWalletBehavior(params: Protocol.DigitalCredentials.SetVirtualWalletBehaviorRequest): Promise<{id: number, result: void, sessionId: string}>;
 
     }
 
