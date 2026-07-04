@@ -1,7 +1,38 @@
 
 
+## Roll protocol to r1656784 — _2026-07-04T05:37:09.000Z_
+######  Diff: [`a0ec9b1...c28ddc6`](https://github.com/ChromeDevTools/devtools-protocol/compare/a0ec9b1...c28ddc6)
+
+```diff
+@@ domains/DigitalCredentials.pdl:7 @@ @@ -7,7 +7,7 @@
+ # This domain allows interacting with the Digital Credentials API for automation.
+ experimental domain DigitalCredentials
+   # The type of virtual wallet action.
+-  type VirtualWalletBehavior extends string
++  type VirtualWalletAction extends string
+     enum
+       respond
+       decline
+@@ -18,11 +18,11 @@ experimental domain DigitalCredentials
+   # issued from this frame.
+   command setVirtualWalletBehavior
+     parameters
+-      # The behavior of the virtual wallet.
+-      VirtualWalletBehavior behavior
+-      # The protocol identifier (e.g. "openid4vp"). Required when |behavior| is
++      # The action of the virtual wallet.
++      VirtualWalletAction action
++      # The protocol identifier (e.g. "openid4vp"). Required when |action| is
+       # "respond", forbidden otherwise.
+       optional string protocol
+       # The response data object returned by the wallet.
+-      # Required when |behavior| is "respond", forbidden otherwise.
++      # Required when |action| is "respond", forbidden otherwise.
+       optional object response
+```
+
 ## Roll protocol to r1655900 — _2026-07-02T05:43:39.000Z_
-######  Diff: [`5b82e41...8c28b8c`](https://github.com/ChromeDevTools/devtools-protocol/compare/5b82e41...8c28b8c)
+######  Diff: [`5b82e41...a0ec9b1`](https://github.com/ChromeDevTools/devtools-protocol/compare/5b82e41...a0ec9b1)
 
 ```diff
 @@ browser_protocol.pdl:26 @@ include domains/DOMSnapshot.pdl
@@ -42892,53 +42923,4 @@ index 4754f17c..8dad9c98 100644
        NavigationRequestBlockedByCsp
        MainFrameNavigation
        MojoBinderPolicy
-```
-
-## Roll protocol to r1203060 — _2023-09-29T04:26:12.000Z_
-######  Diff: [`e3feaa6...7cd293f`](https://github.com/ChromeDevTools/devtools-protocol/compare/e3feaa6...7cd293f)
-
-```diff
-@@ browser_protocol.pdl:9363 @@ experimental domain Storage
-   # Ad advertising element inside an interest group.
-   type InterestGroupAd extends object
-     properties
--      string renderUrl
-+      string renderURL
-       optional string metadata
- 
-   # The full details of an interest group.
-@@ -9373,10 +9373,10 @@ experimental domain Storage
-       string name
-       Network.TimeSinceEpoch expirationTime
-       string joiningOrigin
--      optional string biddingUrl
--      optional string biddingWasmHelperUrl
--      optional string updateUrl
--      optional string trustedBiddingSignalsUrl
-+      optional string biddingLogicURL
-+      optional string biddingWasmHelperURL
-+      optional string updateURL
-+      optional string trustedBiddingSignalsURL
-       array of string trustedBiddingSignalsKeys
-       optional string userBiddingSignals
-       array of InterestGroupAd ads
-@@ -11385,18 +11385,6 @@ experimental domain Preload
-       RedirectedPrerenderingUrlHasEffectiveUrl
-       ActivationUrlHasEffectiveUrl
- 
--  # Fired when a prerender attempt is completed.
--  event prerenderAttemptCompleted
--    parameters
--      PreloadingAttemptKey key
--      # The frame id of the frame initiating prerendering.
--      Page.FrameId initiatingFrameId
--      string prerenderingUrl
--      PrerenderFinalStatus finalStatus
--      # This is used to give users more information about the name of the API call
--      # that is incompatible with prerender and has caused the cancellation of the attempt
--      optional string disallowedApiMethod
--
-   # Fired when a preload enabled state is updated.
-   event preloadEnabledStateUpdated
-     parameters
 ```
