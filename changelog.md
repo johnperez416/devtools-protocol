@@ -1,7 +1,19 @@
 
 
+## Roll protocol to r1657692 — _2026-07-07T05:51:00.000Z_
+######  Diff: [`29e7238...08a408e`](https://github.com/ChromeDevTools/devtools-protocol/compare/29e7238...08a408e)
+
+```diff
+@@ domains/DigitalCredentials.pdl:26 @@ experimental domain DigitalCredentials
+       # The response data object returned by the wallet.
+       # Required when |action| is "respond", forbidden otherwise.
+       optional object response
++      # The frame to scope the virtual wallet behavior to.
++      optional Page.FrameId frameId
+```
+
 ## Roll protocol to r1656784 — _2026-07-04T05:37:09.000Z_
-######  Diff: [`a0ec9b1...c28ddc6`](https://github.com/ChromeDevTools/devtools-protocol/compare/a0ec9b1...c28ddc6)
+######  Diff: [`a0ec9b1...29e7238`](https://github.com/ChromeDevTools/devtools-protocol/compare/a0ec9b1...29e7238)
 
 ```diff
 @@ domains/DigitalCredentials.pdl:7 @@ @@ -7,7 +7,7 @@
@@ -42909,18 +42921,4 @@ index 4754f17c..8dad9c98 100644
 +  command confirmIdpLogin
      parameters
        string dialogId
-```
-
-## Roll protocol to r1203626 — _2023-09-30T04:26:42.000Z_
-######  Diff: [`7cd293f...464d58a`](https://github.com/ChromeDevTools/devtools-protocol/compare/7cd293f...464d58a)
-
-```diff
-@@ browser_protocol.pdl:11322 @@ experimental domain Preload
-       LowEndDevice
-       InvalidSchemeRedirect
-       InvalidSchemeNavigation
--      InProgressNavigation
-       NavigationRequestBlockedByCsp
-       MainFrameNavigation
-       MojoBinderPolicy
 ```

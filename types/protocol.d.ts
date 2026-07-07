@@ -9259,6 +9259,10 @@ export namespace Protocol {
              * Required when |action| is "respond", forbidden otherwise.
              */
             response?: any;
+            /**
+             * The frame to scope the virtual wallet behavior to.
+             */
+            frameId?: Page.FrameId;
         }
     }
 
