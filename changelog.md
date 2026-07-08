@@ -1,7 +1,23 @@
 
 
+## Roll protocol to r1658499 — _2026-07-08T05:32:02.000Z_
+######  Diff: [`d71b8c6...7884183`](https://github.com/ChromeDevTools/devtools-protocol/compare/d71b8c6...7884183)
+
+```diff
+@@ domains/Network.pdl:2223 @@ domain Network
+       FailedToUnwrapKey
+       SessionDeletedDuringRefresh
+       CrossOriginRegistrationSiteNotIncluded
++      InvalidPreProvisionedKeyInitiatorMissing
++      PreProvisionedKeyAccessNotGranted
++      PreProvisionedKeyNotFound
+   # LINT.ThenChange(//content/browser/devtools/protocol/network_handler.cc:DeviceBoundSessionFetchResult)
+ 
+   # Details about a failed device bound session network request.
+```
+
 ## Roll protocol to r1657692 — _2026-07-07T05:51:00.000Z_
-######  Diff: [`29e7238...08a408e`](https://github.com/ChromeDevTools/devtools-protocol/compare/29e7238...08a408e)
+######  Diff: [`29e7238...d71b8c6`](https://github.com/ChromeDevTools/devtools-protocol/compare/29e7238...d71b8c6)
 
 ```diff
 @@ domains/DigitalCredentials.pdl:26 @@ experimental domain DigitalCredentials
@@ -42878,47 +42894,4 @@ index 4754f17c..8dad9c98 100644
  # This domain facilitates obtaining document snapshots with DOM, layout, and style information.
  experimental domain DOMSnapshot
    depends on CSS
-```
-
-## Roll protocol to r1204456 — _2023-10-03T04:26:51.000Z_
-######  Diff: [`464d58a...629de2c`](https://github.com/ChromeDevTools/devtools-protocol/compare/464d58a...629de2c)
-
-```diff
-@@ browser_protocol.pdl:9359 @@ experimental domain Storage
-       win
-       additionalBid
-       additionalBidWin
-+      clear
- 
-   # Ad advertising element inside an interest group.
-   type InterestGroupAd extends object
-@@ -11487,7 +11488,7 @@ experimental domain FedCm
-     enum
-       AccountChooser
-       AutoReauthn
--      ConfirmIdpSignin
-+      ConfirmIdpLogin
- 
-   # Corresponds to IdentityRequestAccount
-   type Account extends object
-@@ -11498,7 +11499,7 @@ experimental domain FedCm
-       string givenName
-       string pictureUrl
-       string idpConfigUrl
--      string idpSigninUrl
-+      string idpLoginUrl
-       LoginState loginState
-       # These two are only set if the loginState is signUp
-       optional string termsOfServiceUrl
-@@ -11528,9 +11529,9 @@ experimental domain FedCm
-       string dialogId
-       integer accountIndex
- 
--  # Only valid if the dialog type is ConfirmIdpSignin. Acts as if the user had
-+  # Only valid if the dialog type is ConfirmIdpLogin. Acts as if the user had
-   # clicked the continue button.
--  command confirmIdpSignin
-+  command confirmIdpLogin
-     parameters
-       string dialogId
 ```
