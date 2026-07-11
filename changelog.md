@@ -1,7 +1,21 @@
 
 
+## Roll protocol to r1660672 — _2026-07-11T05:25:49.000Z_
+######  Diff: [`f6ba0b1...6ced80f`](https://github.com/ChromeDevTools/devtools-protocol/compare/f6ba0b1...6ced80f)
+
+```diff
+@@ domains/Network.pdl:2263 @@ domain Network
+         InitializedService
+         Unreachable
+         ServerError
+-        RefreshQuotaExceeded
+         FatalError
+         SigningQuotaExceeded
+         RefreshedAsWaiter
+```
+
 ## Roll protocol to r1658499 — _2026-07-08T05:32:02.000Z_
-######  Diff: [`d71b8c6...7884183`](https://github.com/ChromeDevTools/devtools-protocol/compare/d71b8c6...7884183)
+######  Diff: [`d71b8c6...f6ba0b1`](https://github.com/ChromeDevTools/devtools-protocol/compare/d71b8c6...f6ba0b1)
 
 ```diff
 @@ domains/Network.pdl:2223 @@ domain Network
@@ -42828,70 +42842,4 @@ index 4754f17c..8dad9c98 100644
        AttributionReportingSourceType type
        string sourceOrigin
        string reportingOrigin
-```
-
-## Roll protocol to r1205644 — _2023-10-05T04:26:19.000Z_
-######  Diff: [`629de2c...40ddf1a`](https://github.com/ChromeDevTools/devtools-protocol/compare/629de2c...40ddf1a)
-
-```diff
-@@ browser_protocol.pdl:824 @@ experimental domain Audits
-       RpPageNotVisible
-       SilentMediationFailure
-       ThirdPartyCookiesBlocked
-+      NotSignedInWithIdp
- 
-   type FederatedAuthUserInfoRequestIssueDetails extends object
-     properties
-@@ -3268,7 +3269,6 @@ domain DOM
- # execution will stop on these operations as if there was a regular breakpoint set.
- domain DOMDebugger
-   depends on DOM
--  depends on Debugger
-   depends on Runtime
- 
-   # DOM breakpoint type.
-@@ -3340,7 +3340,8 @@ domain DOMDebugger
-       experimental optional string targetName
- 
-   # Removes breakpoint on particular native event.
--  experimental command removeInstrumentationBreakpoint
-+  experimental deprecated command removeInstrumentationBreakpoint
-+    redirect EventBreakpoints
-     parameters
-       # Instrumentation name to stop on.
-       string eventName
-@@ -3375,7 +3376,8 @@ domain DOMDebugger
-       experimental optional string targetName
- 
-   # Sets breakpoint on particular native event.
--  experimental command setInstrumentationBreakpoint
-+  experimental deprecated command setInstrumentationBreakpoint
-+    redirect EventBreakpoints
-     parameters
-       # Instrumentation name to stop on.
-       string eventName
-@@ -3386,10 +3388,9 @@ domain DOMDebugger
-       # Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
-       string url
- 
--# EventBreakpoints permits setting breakpoints on particular operations and
--# events in targets that run JavaScript but do not have a DOM.
--# JavaScript execution will stop on these operations as if there was a regular
--# breakpoint set.
-+# EventBreakpoints permits setting JavaScript breakpoints on operations and events
-+# occurring in native code invoked from JavaScript. Once breakpoint is hit, it is
-+# reported through Debugger domain, similarly to regular breakpoints being hit.
- experimental domain EventBreakpoints
-   # Sets breakpoint on particular native event.
-   command setInstrumentationBreakpoint
-@@ -3403,6 +3404,9 @@ experimental domain EventBreakpoints
-       # Instrumentation name to stop on.
-       string eventName
- 
-+  # Removes all breakpoints
-+  command disable
-+
- # This domain facilitates obtaining document snapshots with DOM, layout, and style information.
- experimental domain DOMSnapshot
-   depends on CSS
 ```

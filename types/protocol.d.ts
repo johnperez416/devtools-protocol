@@ -14230,7 +14230,6 @@ export namespace Protocol {
             InitializedService = 'InitializedService',
             Unreachable = 'Unreachable',
             ServerError = 'ServerError',
-            RefreshQuotaExceeded = 'RefreshQuotaExceeded',
             FatalError = 'FatalError',
             SigningQuotaExceeded = 'SigningQuotaExceeded',
             RefreshedAsWaiter = 'RefreshedAsWaiter',
@@ -14245,7 +14244,7 @@ export namespace Protocol {
             /**
              * The result of a refresh.
              */
-            refreshResult: ('Refreshed' | 'InitializedService' | 'Unreachable' | 'ServerError' | 'RefreshQuotaExceeded' | 'FatalError' | 'SigningQuotaExceeded' | 'RefreshedAsWaiter' | 'TransientSigningError');
+            refreshResult: ('Refreshed' | 'InitializedService' | 'Unreachable' | 'ServerError' | 'FatalError' | 'SigningQuotaExceeded' | 'RefreshedAsWaiter' | 'TransientSigningError');
             /**
              * If there was a fetch attempt, the result of that.
              */
