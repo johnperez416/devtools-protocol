@@ -3713,8 +3713,6 @@ export namespace Protocol {
             clientSecurityState?: Network.ClientSecurityState;
         }
 
-        export type AttributionReportingIssueType = ('PermissionPolicyDisabled' | 'UntrustworthyReportingOrigin' | 'InsecureContext' | 'InvalidHeader' | 'InvalidRegisterTriggerHeader' | 'SourceAndTriggerHeaders' | 'SourceIgnored' | 'TriggerIgnored' | 'OsSourceIgnored' | 'OsTriggerIgnored' | 'InvalidRegisterOsSourceHeader' | 'InvalidRegisterOsTriggerHeader' | 'WebAndOsHeaders' | 'NoWebOrOsSupport' | 'NavigationRegistrationWithoutTransientUserActivation' | 'InvalidInfoHeader' | 'NoRegisterSourceHeader' | 'NoRegisterTriggerHeader' | 'NoRegisterOsSourceHeader' | 'NoRegisterOsTriggerHeader' | 'NavigationRegistrationUniqueScopeAlreadySet');
-
         export type SharedDictionaryError = ('UseErrorCrossOriginNoCorsRequest' | 'UseErrorDictionaryLoadFailure' | 'UseErrorMatchingDictionaryNotUsed' | 'UseErrorUnexpectedContentDictionaryHeader' | 'WriteErrorCossOriginNoCorsRequest' | 'WriteErrorDisallowedBySettings' | 'WriteErrorExpiredResponse' | 'WriteErrorFeatureDisabled' | 'WriteErrorInsufficientResources' | 'WriteErrorInvalidMatchField' | 'WriteErrorInvalidStructuredHeader' | 'WriteErrorInvalidTTLField' | 'WriteErrorNavigationRequest' | 'WriteErrorNoMatchField' | 'WriteErrorNonIntegerTTLField' | 'WriteErrorNonListMatchDestField' | 'WriteErrorNonSecureContext' | 'WriteErrorNonStringIdField' | 'WriteErrorNonStringInMatchDestList' | 'WriteErrorInvalidMatchDestList' | 'WriteErrorNonStringMatchField' | 'WriteErrorNonTokenTypeField' | 'WriteErrorRequestAborted' | 'WriteErrorShuttingDown' | 'WriteErrorTooLongIdField' | 'WriteErrorUnsupportedType');
 
         export type SRIMessageSignatureError = ('MissingSignatureHeader' | 'MissingSignatureInputHeader' | 'InvalidSignatureHeader' | 'InvalidSignatureInputHeader' | 'SignatureHeaderValueIsNotByteSequence' | 'SignatureHeaderValueIsParameterized' | 'SignatureHeaderValueIsIncorrectLength' | 'SignatureInputHeaderMissingLabel' | 'SignatureInputHeaderValueNotInnerList' | 'SignatureInputHeaderValueMissingComponents' | 'SignatureInputHeaderInvalidComponentType' | 'SignatureInputHeaderInvalidComponentName' | 'SignatureInputHeaderInvalidHeaderComponentParameter' | 'SignatureInputHeaderInvalidDerivedComponentParameter' | 'SignatureInputHeaderKeyIdLength' | 'SignatureInputHeaderInvalidParameter' | 'SignatureInputHeaderMissingRequiredParameters' | 'ValidationFailedSignatureExpired' | 'ValidationFailedInvalidLength' | 'ValidationFailedSignatureMismatch' | 'ValidationFailedIntegrityMismatch' | 'SignatureBaseUnknownDerivedComponent' | 'SignatureBaseMissingHeader' | 'SignatureBaseInvalidUnencodedDigest' | 'SignatureBaseUnsupportedComponent');
@@ -3722,17 +3720,6 @@ export namespace Protocol {
         export type UnencodedDigestError = ('MalformedDictionary' | 'UnknownAlgorithm' | 'IncorrectDigestType' | 'IncorrectDigestLength');
 
         export type ConnectionAllowlistError = ('InvalidHeader' | 'MoreThanOneList' | 'ItemNotInnerList' | 'InvalidAllowlistItemType' | 'ReportingEndpointNotToken' | 'InvalidUrlPattern');
-
-        /**
-         * Details for issues around "Attribution Reporting API" usage.
-         * Explainer: https://github.com/WICG/attribution-reporting-api
-         */
-        export interface AttributionReportingIssueDetails {
-            violationType: AttributionReportingIssueType;
-            request?: AffectedRequest;
-            violatingNodeId?: DOM.BackendNodeId;
-            invalidParameter?: string;
-        }
 
         /**
          * Details for issues about documents in Quirks Mode
@@ -4032,11 +4019,29 @@ export namespace Protocol {
         }
 
         /**
+         * Details for issues about lazy-loaded images without explicit dimensions.
+         */
+        export interface LazyLoadImageIssueDetails {
+            /**
+             * DOM node of the problematic HTMLImageElement.
+             */
+            nodeId: DOM.BackendNodeId;
+            /**
+             * URL or src attribute of the image.
+             */
+            url: string;
+            /**
+             * Frame containing the image.
+             */
+            frameId: Page.FrameId;
+        }
+
+        /**
          * A unique identifier for the type of issue. Each type may use one of the
          * optional fields in InspectorIssueDetails to convey more specific
          * information about the kind of issue.
          */
-        export type InspectorIssueCode = ('CookieIssue' | 'MixedContentIssue' | 'BlockedByResponseIssue' | 'HeavyAdIssue' | 'ContentSecurityPolicyIssue' | 'SharedArrayBufferIssue' | 'CorsIssue' | 'AttributionReportingIssue' | 'QuirksModeIssue' | 'PartitioningBlobURLIssue' | 'NavigatorUserAgentIssue' | 'GenericIssue' | 'DeprecationIssue' | 'ClientHintIssue' | 'FederatedAuthRequestIssue' | 'BounceTrackingIssue' | 'CookieDeprecationMetadataIssue' | 'StylesheetLoadingIssue' | 'FederatedAuthUserInfoRequestIssue' | 'PropertyRuleIssue' | 'SharedDictionaryIssue' | 'ElementAccessibilityIssue' | 'SRIMessageSignatureIssue' | 'UnencodedDigestIssue' | 'ConnectionAllowlistIssue' | 'UserReidentificationIssue' | 'PermissionElementIssue' | 'PerformanceIssue' | 'SelectivePermissionsInterventionIssue' | 'EmailVerificationRequestIssue');
+        export type InspectorIssueCode = ('CookieIssue' | 'MixedContentIssue' | 'BlockedByResponseIssue' | 'HeavyAdIssue' | 'ContentSecurityPolicyIssue' | 'SharedArrayBufferIssue' | 'CorsIssue' | 'QuirksModeIssue' | 'PartitioningBlobURLIssue' | 'NavigatorUserAgentIssue' | 'GenericIssue' | 'DeprecationIssue' | 'ClientHintIssue' | 'FederatedAuthRequestIssue' | 'BounceTrackingIssue' | 'CookieDeprecationMetadataIssue' | 'StylesheetLoadingIssue' | 'FederatedAuthUserInfoRequestIssue' | 'PropertyRuleIssue' | 'SharedDictionaryIssue' | 'ElementAccessibilityIssue' | 'SRIMessageSignatureIssue' | 'UnencodedDigestIssue' | 'ConnectionAllowlistIssue' | 'UserReidentificationIssue' | 'PermissionElementIssue' | 'PerformanceIssue' | 'SelectivePermissionsInterventionIssue' | 'EmailVerificationRequestIssue' | 'LazyLoadImageIssue');
 
         /**
          * This struct holds a list of optional fields with additional information
@@ -4051,7 +4056,6 @@ export namespace Protocol {
             contentSecurityPolicyIssueDetails?: ContentSecurityPolicyIssueDetails;
             sharedArrayBufferIssueDetails?: SharedArrayBufferIssueDetails;
             corsIssueDetails?: CorsIssueDetails;
-            attributionReportingIssueDetails?: AttributionReportingIssueDetails;
             quirksModeIssueDetails?: QuirksModeIssueDetails;
             partitioningBlobURLIssueDetails?: PartitioningBlobURLIssueDetails;
             /**
@@ -4077,6 +4081,7 @@ export namespace Protocol {
             performanceIssueDetails?: PerformanceIssueDetails;
             selectivePermissionsInterventionIssueDetails?: SelectivePermissionsInterventionIssueDetails;
             emailVerificationRequestIssueDetails?: EmailVerificationRequestIssueDetails;
+            lazyLoadImageIssueDetails?: LazyLoadImageIssueDetails;
         }
 
         /**
@@ -16796,7 +16801,7 @@ export namespace Protocol {
          * in services/network/public/cpp/permissions_policy/permissions_policy_features.json5.
          * @experimental
          */
-        export type PermissionsPolicyFeature = ('accelerometer' | 'all-screens-capture' | 'ambient-light-sensor' | 'aria-notify' | 'attribution-reporting' | 'autofill' | 'autoplay' | 'bluetooth' | 'browsing-topics' | 'camera' | 'captured-surface-control' | 'ch-dpr' | 'ch-device-memory' | 'ch-downlink' | 'ch-ect' | 'ch-prefers-color-scheme' | 'ch-prefers-reduced-motion' | 'ch-prefers-reduced-transparency' | 'ch-rtt' | 'ch-save-data' | 'ch-ua' | 'ch-ua-arch' | 'ch-ua-bitness' | 'ch-ua-high-entropy-values' | 'ch-ua-platform' | 'ch-ua-model' | 'ch-ua-mobile' | 'ch-ua-form-factors' | 'ch-ua-full-version' | 'ch-ua-full-version-list' | 'ch-ua-platform-version' | 'ch-ua-wow64' | 'ch-viewport-height' | 'ch-viewport-width' | 'ch-width' | 'clipboard-read' | 'clipboard-write' | 'compute-pressure' | 'controlled-frame' | 'cross-origin-isolated' | 'deferred-fetch' | 'deferred-fetch-minimal' | 'device-attributes' | 'digital-credentials-create' | 'digital-credentials-get' | 'direct-sockets' | 'direct-sockets-multicast' | 'display-capture' | 'document-domain' | 'encrypted-media' | 'execution-while-out-of-viewport' | 'execution-while-not-rendered' | 'focus-without-user-activation' | 'fullscreen' | 'frobulate' | 'gamepad' | 'geolocation' | 'gyroscope' | 'hid' | 'identity-credentials-get' | 'idle-detection' | 'interest-cohort' | 'join-ad-interest-group' | 'keyboard-map' | 'language-detector' | 'language-model' | 'local-fonts' | 'local-network' | 'local-network-access' | 'loopback-network' | 'magnetometer' | 'manual-text' | 'media-playback-while-not-visible' | 'microphone' | 'midi' | 'on-device-speech-recognition' | 'otp-credentials' | 'payment' | 'picture-in-picture' | 'private-aggregation' | 'private-state-token-issuance' | 'private-state-token-redemption' | 'publickey-credentials-create' | 'publickey-credentials-get' | 'record-ad-auction-events' | 'rewriter' | 'run-ad-auction' | 'screen-wake-lock' | 'serial' | 'shared-storage' | 'shared-storage-select-url' | 'smart-card' | 'speaker-selection' | 'storage-access' | 'sub-apps' | 'summarizer' | 'sync-xhr' | 'tools' | 'translator' | 'unload' | 'usb' | 'usb-unrestricted' | 'vertical-scroll' | 'web-app-installation' | 'webnn' | 'web-printing' | 'web-share' | 'window-management' | 'writer' | 'xr-spatial-tracking');
+        export type PermissionsPolicyFeature = ('accelerometer' | 'all-screens-capture' | 'ambient-light-sensor' | 'aria-notify' | 'autofill' | 'autoplay' | 'bluetooth' | 'browsing-topics' | 'camera' | 'captured-surface-control' | 'ch-dpr' | 'ch-device-memory' | 'ch-downlink' | 'ch-ect' | 'ch-prefers-color-scheme' | 'ch-prefers-reduced-motion' | 'ch-prefers-reduced-transparency' | 'ch-rtt' | 'ch-save-data' | 'ch-ua' | 'ch-ua-arch' | 'ch-ua-bitness' | 'ch-ua-high-entropy-values' | 'ch-ua-platform' | 'ch-ua-model' | 'ch-ua-mobile' | 'ch-ua-form-factors' | 'ch-ua-full-version' | 'ch-ua-full-version-list' | 'ch-ua-platform-version' | 'ch-ua-wow64' | 'ch-viewport-height' | 'ch-viewport-width' | 'ch-width' | 'clipboard-read' | 'clipboard-write' | 'compute-pressure' | 'controlled-frame' | 'cross-origin-isolated' | 'deferred-fetch' | 'deferred-fetch-minimal' | 'device-attributes' | 'digital-credentials-create' | 'digital-credentials-get' | 'direct-sockets' | 'direct-sockets-multicast' | 'display-capture' | 'document-domain' | 'encrypted-media' | 'execution-while-out-of-viewport' | 'execution-while-not-rendered' | 'focus-without-user-activation' | 'fullscreen' | 'frobulate' | 'gamepad' | 'geolocation' | 'gyroscope' | 'hid' | 'identity-credentials-get' | 'idle-detection' | 'interest-cohort' | 'join-ad-interest-group' | 'keyboard-map' | 'language-detector' | 'language-model' | 'local-fonts' | 'local-network' | 'local-network-access' | 'loopback-network' | 'magnetometer' | 'manual-text' | 'media-playback-while-not-visible' | 'microphone' | 'midi' | 'on-device-speech-recognition' | 'otp-credentials' | 'payment' | 'picture-in-picture' | 'private-aggregation' | 'private-state-token-issuance' | 'private-state-token-redemption' | 'publickey-credentials-create' | 'publickey-credentials-get' | 'record-ad-auction-events' | 'rewriter' | 'run-ad-auction' | 'screen-wake-lock' | 'serial' | 'shared-storage' | 'shared-storage-select-url' | 'smart-card' | 'speaker-selection' | 'storage-access' | 'sub-apps' | 'summarizer' | 'sync-xhr' | 'tools' | 'translator' | 'unload' | 'usb' | 'usb-unrestricted' | 'vertical-scroll' | 'web-app-installation' | 'webnn' | 'web-printing' | 'web-share' | 'window-management' | 'writer' | 'xr-spatial-tracking');
 
         /**
          * Reason for a permissions policy feature to be disabled.

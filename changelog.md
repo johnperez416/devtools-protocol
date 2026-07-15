@@ -1,7 +1,122 @@
 
 
+## Roll protocol to r1662358 — _2026-07-15T05:18:52.000Z_
+######  Diff: [`0837097...8fe6908`](https://github.com/ChromeDevTools/devtools-protocol/compare/0837097...8fe6908)
+
+```diff
+@@ domains/Audits.pdl:270 @@ experimental domain Audits
+       optional Network.IPAddressSpace resourceIPAddressSpace
+       optional Network.ClientSecurityState clientSecurityState
+ 
+-  type AttributionReportingIssueType extends string
+-    enum
+-      PermissionPolicyDisabled
+-      UntrustworthyReportingOrigin
+-      InsecureContext
+-      # TODO(apaseltiner): Rename this to InvalidRegisterSourceHeader
+-      InvalidHeader
+-      InvalidRegisterTriggerHeader
+-      SourceAndTriggerHeaders
+-      SourceIgnored
+-      TriggerIgnored
+-      OsSourceIgnored
+-      OsTriggerIgnored
+-      InvalidRegisterOsSourceHeader
+-      InvalidRegisterOsTriggerHeader
+-      WebAndOsHeaders
+-      NoWebOrOsSupport
+-      NavigationRegistrationWithoutTransientUserActivation
+-      InvalidInfoHeader
+-      NoRegisterSourceHeader
+-      NoRegisterTriggerHeader
+-      NoRegisterOsSourceHeader
+-      NoRegisterOsTriggerHeader
+-      NavigationRegistrationUniqueScopeAlreadySet
+-
+   type SharedDictionaryError extends string
+     enum
+       UseErrorCrossOriginNoCorsRequest
+@@ -368,15 +343,6 @@ experimental domain Audits
+       ReportingEndpointNotToken
+       InvalidUrlPattern
+ 
+-  # Details for issues around "Attribution Reporting API" usage.
+-  # Explainer: https://github.com/WICG/attribution-reporting-api
+-  type AttributionReportingIssueDetails extends object
+-    properties
+-      AttributionReportingIssueType violationType
+-      optional AffectedRequest request
+-      optional DOM.BackendNodeId violatingNodeId
+-      optional string invalidParameter
+-
+ # Details for issues about documents in Quirks Mode
+ # or Limited Quirks Mode that affects page layouting.
+   type QuirksModeIssueDetails extends object
+@@ -778,6 +744,16 @@ experimental domain Audits
+       # The stack trace at the time of the intervention.
+       optional Runtime.StackTrace stackTrace
+ 
++  # Details for issues about lazy-loaded images without explicit dimensions.
++  type LazyLoadImageIssueDetails extends object
++    properties
++      # DOM node of the problematic HTMLImageElement.
++      DOM.BackendNodeId nodeId
++      # URL or src attribute of the image.
++      string url
++      # Frame containing the image.
++      Page.FrameId frameId
++
+   # A unique identifier for the type of issue. Each type may use one of the
+   # optional fields in InspectorIssueDetails to convey more specific
+   # information about the kind of issue.
+@@ -790,7 +766,6 @@ experimental domain Audits
+       ContentSecurityPolicyIssue
+       SharedArrayBufferIssue
+       CorsIssue
+-      AttributionReportingIssue
+       QuirksModeIssue
+       PartitioningBlobURLIssue
+       # Deprecated
+@@ -814,6 +789,7 @@ experimental domain Audits
+       PerformanceIssue
+       SelectivePermissionsInterventionIssue
+       EmailVerificationRequestIssue
++      LazyLoadImageIssue
+ 
+   # This struct holds a list of optional fields with additional information
+   # specific to the kind of issue. When adding a new issue code, please also
+@@ -827,7 +803,6 @@ experimental domain Audits
+       optional ContentSecurityPolicyIssueDetails contentSecurityPolicyIssueDetails
+       optional SharedArrayBufferIssueDetails sharedArrayBufferIssueDetails
+       optional CorsIssueDetails corsIssueDetails
+-      optional AttributionReportingIssueDetails attributionReportingIssueDetails
+       optional QuirksModeIssueDetails quirksModeIssueDetails
+       optional PartitioningBlobURLIssueDetails partitioningBlobURLIssueDetails
+       deprecated optional NavigatorUserAgentIssueDetails navigatorUserAgentIssueDetails
+@@ -850,6 +825,7 @@ experimental domain Audits
+       optional PerformanceIssueDetails performanceIssueDetails
+       optional SelectivePermissionsInterventionIssueDetails selectivePermissionsInterventionIssueDetails
+       optional EmailVerificationRequestIssueDetails emailVerificationRequestIssueDetails
++      optional LazyLoadImageIssueDetails lazyLoadImageIssueDetails
+ 
+   # A unique id for a DevTools inspector issue. Allows other entities (e.g.
+   # exceptions, CDP message, console messages, etc.) to reference an issue.
+diff --git a/pdl/domains/Page.pdl b/pdl/domains/Page.pdl
+index 414867f5..26941081 100644
+--- a/pdl/domains/Page.pdl
++++ b/pdl/domains/Page.pdl
+@@ -74,7 +74,6 @@ domain Page
+       all-screens-capture
+       ambient-light-sensor
+       aria-notify
+-      attribution-reporting
+       autofill
+       autoplay
+       bluetooth
+```
+
 ## Roll protocol to r1660672 — _2026-07-11T05:25:49.000Z_
-######  Diff: [`f6ba0b1...6ced80f`](https://github.com/ChromeDevTools/devtools-protocol/compare/f6ba0b1...6ced80f)
+######  Diff: [`f6ba0b1...0837097`](https://github.com/ChromeDevTools/devtools-protocol/compare/f6ba0b1...0837097)
 
 ```diff
 @@ domains/Network.pdl:2263 @@ domain Network
@@ -42819,27 +42934,4 @@ index 4754f17c..8dad9c98 100644
        # The clockwise rotation of a pen stylus around its own major axis, in degrees in the range [0,359] (default: 0).
        experimental optional integer twist
        # X delta in CSS pixels for mouse wheel event (default: 0).
-```
-
-## Roll protocol to r1206220 — _2023-10-06T04:26:22.000Z_
-######  Diff: [`40ddf1a...f050ff5`](https://github.com/ChromeDevTools/devtools-protocol/compare/40ddf1a...f050ff5)
-
-```diff
-@@ browser_protocol.pdl:9824 @@ experimental domain Storage
-     properties
-       Network.TimeSinceEpoch time
-       # duration in seconds
--      optional integer expiry
--      # eventReportWindow and eventReportWindows are mutually exclusive
-+      integer expiry
-+      AttributionReportingEventReportWindows eventReportWindows
-       # duration in seconds
--      optional integer eventReportWindow
--      optional AttributionReportingEventReportWindows eventReportWindows
--      # duration in seconds
--      optional integer aggregatableReportWindow
-+      integer aggregatableReportWindow
-       AttributionReportingSourceType type
-       string sourceOrigin
-       string reportingOrigin
 ```
