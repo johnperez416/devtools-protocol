@@ -1,7 +1,186 @@
 
 
+## Roll protocol to r1663043 — _2026-07-16T05:25:38.000Z_
+######  Diff: [`2c7c583...08fbde2`](https://github.com/ChromeDevTools/devtools-protocol/compare/2c7c583...08fbde2)
+
+```diff
+@@ domains/Audits.pdl:124 @@ experimental domain Audits
+ 
+   type MixedContentResourceType extends string
+     enum
+-      AttributionSrc
+       Audio
+       Beacon
+       CSPReport
+diff --git a/pdl/domains/Browser.pdl b/pdl/domains/Browser.pdl
+index 6015a945..b1555691 100644
+--- a/pdl/domains/Browser.pdl
++++ b/pdl/domains/Browser.pdl
+@@ -332,21 +332,3 @@ domain Browser
+   command addPrivacySandboxEnrollmentOverride
+     parameters
+       string url
+-
+-  experimental type PrivacySandboxAPI extends string
+-    enum
+-      BiddingAndAuctionServices
+-      TrustedKeyValue
+-
+-  # Configures encryption keys used with a given privacy sandbox API to talk
+-  # to a trusted coordinator.  Since this is intended for test automation only,
+-  # coordinatorOrigin must be a .test domain. No existing coordinator
+-  # configuration for the origin may exist.
+-  command addPrivacySandboxCoordinatorKeyConfig
+-    parameters
+-      PrivacySandboxAPI api
+-      string coordinatorOrigin
+-      string keyConfig
+-      # BrowserContext to perform the action in. When omitted, default browser
+-      # context is used.
+-      optional BrowserContextID browserContextId
+diff --git a/pdl/domains/Storage.pdl b/pdl/domains/Storage.pdl
+index 100e94d7..6018c22a 100644
+--- a/pdl/domains/Storage.pdl
++++ b/pdl/domains/Storage.pdl
+@@ -42,45 +42,12 @@ experimental domain Storage
+       string issuerOrigin
+       number count
+ 
+-  # Protected audience interest group auction identifier.
+-  type InterestGroupAuctionId extends string
+-
+-  # Enum of interest group access types.
+-  type InterestGroupAccessType extends string
+-    enum
+-      join
+-      leave
+-      update
+-      loaded
+-      bid
+-      win
+-      additionalBid
+-      additionalBidWin
+-      topLevelBid
+-      topLevelAdditionalBid
+-      clear
+-
+-  # Enum of auction events.
+-  type InterestGroupAuctionEventType extends string
+-    enum
+-      started
+-      configResolved
+-
+-  # Enum of network fetches auctions can do.
+-  type InterestGroupAuctionFetchType extends string
+-    enum
+-      bidderJs
+-      bidderWasm
+-      sellerJs
+-      bidderTrustedSignals
+-      sellerTrustedSignals
+ 
+   # Enum of shared storage access scopes.
+   type SharedStorageAccessScope extends string
+     enum
+       window
+       sharedStorageWorklet
+-      protectedAudienceWorklet
+       header
+ 
+   # Enum of shared storage access methods.
+@@ -385,29 +352,6 @@ experimental domain Storage
+       # True if any tokens were deleted, false otherwise.
+       boolean didDeleteTokens
+ 
+-  # Gets details for a named interest group.
+-  experimental command getInterestGroupDetails
+-    parameters
+-      string ownerOrigin
+-      string name
+-    returns
+-      # This largely corresponds to:
+-      # https://wicg.github.io/turtledove/#dictdef-generatebidinterestgroup
+-      # but has absolute expirationTime instead of relative lifetimeMs and
+-      # also adds joiningOrigin.
+-      object details
+-
+-  # Enables/Disables issuing of interestGroupAccessed events.
+-  experimental command setInterestGroupTracking
+-    parameters
+-      boolean enable
+-
+-  # Enables/Disables issuing of interestGroupAuctionEventOccurred and
+-  # interestGroupAuctionNetworkRequestCreated.
+-  experimental command setInterestGroupAuctionTracking
+-    parameters
+-      boolean enable
+-
+   # Gets metadata for an origin's shared storage.
+   experimental command getSharedStorageMetadata
+     parameters
+@@ -515,48 +459,6 @@ experimental domain Storage
+       # Storage bucket to update.
+       string bucketId
+ 
+-  # One of the interest groups was accessed. Note that these events are global
+-  # to all targets sharing an interest group store.
+-  event interestGroupAccessed
+-    parameters
+-      Network.TimeSinceEpoch accessTime
+-      InterestGroupAccessType type
+-      string ownerOrigin
+-      string name
+-      # For topLevelBid/topLevelAdditionalBid, and when appropriate,
+-      # win and additionalBidWin
+-      optional string componentSellerOrigin
+-      # For bid or somethingBid event, if done locally and not on a server.
+-      optional number bid
+-      optional string bidCurrency
+-      # For non-global events --- links to interestGroupAuctionEvent
+-      optional InterestGroupAuctionId uniqueAuctionId
+-
+-  # An auction involving interest groups is taking place. These events are
+-  # target-specific.
+-  event interestGroupAuctionEventOccurred
+-    parameters
+-      Network.TimeSinceEpoch eventTime
+-      InterestGroupAuctionEventType type
+-      InterestGroupAuctionId uniqueAuctionId
+-      # Set for child auctions.
+-      optional InterestGroupAuctionId parentAuctionId
+-      # Set for started and configResolved
+-      optional object auctionConfig
+-
+-  # Specifies which auctions a particular network fetch may be related to, and
+-  # in what role. Note that it is not ordered with respect to
+-  # Network.requestWillBeSent (but will happen before loadingFinished
+-  # loadingFailed).
+-  event interestGroupAuctionNetworkRequestCreated
+-    parameters
+-      InterestGroupAuctionFetchType type
+-      Network.RequestId requestId
+-      # This is the set of the auctions using the worklet that issued this
+-      # request.  In the case of trusted signals, it's possible that only some of
+-      # them actually care about the keys being queried.
+-      array of InterestGroupAuctionId auctions
+-
+   # Shared storage was accessed by the associated page.
+   # The following parameters are included in all events.
+   event sharedStorageAccessed
+@@ -621,9 +523,3 @@ experimental domain Storage
+   experimental command getRelatedWebsiteSets
+     returns
+       array of RelatedWebsiteSet sets
+-
+-  command setProtectedAudienceKAnonymity
+-    parameters
+-      string owner
+-      string name
+-      array of binary hashes
+```
+
 ## Roll protocol to r1662358 — _2026-07-15T05:18:52.000Z_
-######  Diff: [`0837097...8fe6908`](https://github.com/ChromeDevTools/devtools-protocol/compare/0837097...8fe6908)
+######  Diff: [`0837097...2c7c583`](https://github.com/ChromeDevTools/devtools-protocol/compare/0837097...2c7c583)
 
 ```diff
 @@ domains/Audits.pdl:270 @@ experimental domain Audits
@@ -42904,34 +43083,4 @@ index 4754f17c..8dad9c98 100644
        SpeculationRuleRemoved
        ActivatedWithAuxiliaryBrowsingContexts
        MaxNumOfRunningEagerPrerendersExceeded
-```
-
-## Roll protocol to r1207450 — _2023-10-10T04:26:17.000Z_
-######  Diff: [`f050ff5...37c2c03`](https://github.com/ChromeDevTools/devtools-protocol/compare/f050ff5...37c2c03)
-
-```diff
-@@ browser_protocol.pdl:4499 @@ domain Input
-       # The normalized tangential pressure, which has a range of [-1,1] (default: 0).
-       experimental optional number tangentialPressure
-       # The plane angle between the Y-Z plane and the plane containing both the stylus axis and the Y axis, in degrees of the range [-90,90], a positive tiltX is to the right (default: 0)
--      experimental optional integer tiltX
-+      optional number tiltX
-       # The plane angle between the X-Z plane and the plane containing both the stylus axis and the X axis, in degrees of the range [-90,90], a positive tiltY is towards the user (default: 0).
--      experimental optional integer tiltY
-+      optional number tiltY
-       # The clockwise rotation of a pen stylus around its own major axis, in degrees in the range [0,359] (default: 0).
-       experimental optional integer twist
-       # Identifier used to track touch sources between events, must be unique within an event.
-@@ -4667,9 +4667,9 @@ domain Input
-       # The normalized tangential pressure, which has a range of [-1,1] (default: 0).
-       experimental optional number tangentialPressure
-       # The plane angle between the Y-Z plane and the plane containing both the stylus axis and the Y axis, in degrees of the range [-90,90], a positive tiltX is to the right (default: 0).
--      experimental optional integer tiltX
-+      optional number tiltX
-       # The plane angle between the X-Z plane and the plane containing both the stylus axis and the X axis, in degrees of the range [-90,90], a positive tiltY is towards the user (default: 0).
--      experimental optional integer tiltY
-+      optional number tiltY
-       # The clockwise rotation of a pen stylus around its own major axis, in degrees in the range [0,359] (default: 0).
-       experimental optional integer twist
-       # X delta in CSS pixels for mouse wheel event (default: 0).
 ```
