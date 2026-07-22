@@ -1,7 +1,50 @@
 
 
+## Roll protocol to r1666022 — _2026-07-22T05:31:07.000Z_
+######  Diff: [`3bd8f01...95adec0`](https://github.com/ChromeDevTools/devtools-protocol/compare/3bd8f01...95adec0)
+
+```diff
+@@ domains/Storage.pdl:21 @@ experimental domain Storage
+       websql
+       service_workers
+       cache_storage
+-      interest_groups
+       shared_storage
+       storage_buckets
+       all
+diff --git a/pdl/domains/WebAuthn.pdl b/pdl/domains/WebAuthn.pdl
+index 0b3700ef..ffa0d262 100644
+--- a/pdl/domains/WebAuthn.pdl
++++ b/pdl/domains/WebAuthn.pdl
+@@ -66,6 +66,11 @@ experimental domain WebAuthn
+       # https://fidoalliance.org/specs/fido-v2.2-rd-20241003/fido-client-to-authenticator-protocol-v2.2-rd-20241003.html#sctn-hmac-secret-make-cred-extension
+       # Defaults to false.
+       optional boolean hasHmacSecretMc
++      # If set to true, the authenticator will support the cmtgKey (Credential
++      # Manager Trust Group Key) extension.
++      # https://github.com/w3c/webauthn/pull/2377
++      # Defaults to false.
++      optional boolean hasCmtgKey
+       # If set to true, tests of user presence will succeed immediately.
+       # Otherwise, they will not be resolved. Defaults to true.
+       optional boolean automaticPresenceSimulation
+@@ -115,6 +120,12 @@ experimental domain WebAuthn
+       # not set.
+       # https://w3c.github.io/webauthn/#dom-publickeycredentialuserentity-displayname
+       optional string userDisplayName
++      # The CMTG keys associated with the credential.
++      optional array of binary cmtgKeys
++      # The 0-based index of the active key in cmtgKeys.
++      optional integer activeCmtgKeyIndex
++      # If true, the authenticator will generate a new CMTG key on the next operation.
++      optional boolean generateCmtgKeyOnNextOperation
+ 
+   # Enable the WebAuthn domain and start intercepting credential storage and
+   # retrieval with a virtual authenticator.
+```
+
 ## Roll protocol to r1663043 — _2026-07-16T05:25:38.000Z_
-######  Diff: [`2c7c583...08fbde2`](https://github.com/ChromeDevTools/devtools-protocol/compare/2c7c583...08fbde2)
+######  Diff: [`2c7c583...3bd8f01`](https://github.com/ChromeDevTools/devtools-protocol/compare/2c7c583...3bd8f01)
 
 ```diff
 @@ domains/Audits.pdl:124 @@ experimental domain Audits
@@ -43069,18 +43112,4 @@ index 4754f17c..8dad9c98 100644
    # Fired when the node should be inspected. This happens after call to `setInspectMode` or when
    # user manually inspects an element.
    event inspectNodeRequested
-```
-
-## Roll protocol to r1208070 — _2023-10-11T04:26:19.000Z_
-######  Diff: [`37c2c03...25e67ec`](https://github.com/ChromeDevTools/devtools-protocol/compare/37c2c03...25e67ec)
-
-```diff
-@@ browser_protocol.pdl:11376 @@ experimental domain Preload
-       MemoryPressureOnTrigger
-       MemoryPressureAfterTriggered
-       PrerenderingDisabledByDevTools
--      ResourceLoadBlockedByClient
-       SpeculationRuleRemoved
-       ActivatedWithAuxiliaryBrowsingContexts
-       MaxNumOfRunningEagerPrerendersExceeded
 ```

@@ -19972,7 +19972,7 @@ export namespace Protocol {
         /**
          * Enum of possible storage types.
          */
-        export type StorageType = ('cookies' | 'file_systems' | 'indexeddb' | 'local_storage' | 'shader_cache' | 'websql' | 'service_workers' | 'cache_storage' | 'interest_groups' | 'shared_storage' | 'storage_buckets' | 'all' | 'other');
+        export type StorageType = ('cookies' | 'file_systems' | 'indexeddb' | 'local_storage' | 'shader_cache' | 'websql' | 'service_workers' | 'cache_storage' | 'shared_storage' | 'storage_buckets' | 'all' | 'other');
 
         /**
          * Usage for a storage type.
@@ -21959,6 +21959,13 @@ export namespace Protocol {
              */
             hasHmacSecretMc?: boolean;
             /**
+             * If set to true, the authenticator will support the cmtgKey (Credential
+             * Manager Trust Group Key) extension.
+             * https://github.com/w3c/webauthn/pull/2377
+             * Defaults to false.
+             */
+            hasCmtgKey?: boolean;
+            /**
              * If set to true, tests of user presence will succeed immediately.
              * Otherwise, they will not be resolved. Defaults to true.
              */
@@ -22033,6 +22040,18 @@ export namespace Protocol {
              * https://w3c.github.io/webauthn/#dom-publickeycredentialuserentity-displayname
              */
             userDisplayName?: string;
+            /**
+             * The CMTG keys associated with the credential.
+             */
+            cmtgKeys?: string[];
+            /**
+             * The 0-based index of the active key in cmtgKeys.
+             */
+            activeCmtgKeyIndex?: integer;
+            /**
+             * If true, the authenticator will generate a new CMTG key on the next operation.
+             */
+            generateCmtgKeyOnNextOperation?: boolean;
         }
 
         export interface EnableRequest {
