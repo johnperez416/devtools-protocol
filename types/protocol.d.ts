@@ -22142,6 +22142,8 @@ export namespace Protocol {
             credentialId: string;
             backupEligibility?: boolean;
             backupState?: boolean;
+            activeCmtgKeyIndex?: integer;
+            generateCmtgKeyOnNextOperation?: boolean;
         }
 
         /**

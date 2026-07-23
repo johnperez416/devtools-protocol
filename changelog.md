@@ -1,7 +1,22 @@
 
 
+## Roll protocol to r1666840 — _2026-07-23T05:37:45.000Z_
+######  Diff: [`8ff84ba...874b52c`](https://github.com/ChromeDevTools/devtools-protocol/compare/8ff84ba...874b52c)
+
+```diff
+@@ domains/WebAuthn.pdl:222 @@ experimental domain WebAuthn
+       binary credentialId
+       optional boolean backupEligibility
+       optional boolean backupState
++      optional integer activeCmtgKeyIndex
++      optional boolean generateCmtgKeyOnNextOperation
+ 
+   # Triggered when a credential is added to an authenticator.
+   event credentialAdded
+```
+
 ## Roll protocol to r1666022 — _2026-07-22T05:31:07.000Z_
-######  Diff: [`3bd8f01...95adec0`](https://github.com/ChromeDevTools/devtools-protocol/compare/3bd8f01...95adec0)
+######  Diff: [`3bd8f01...8ff84ba`](https://github.com/ChromeDevTools/devtools-protocol/compare/3bd8f01...8ff84ba)
 
 ```diff
 @@ domains/Storage.pdl:21 @@ experimental domain Storage
@@ -43076,40 +43091,4 @@ index 4754f17c..8dad9c98 100644
    # Overrides the Idle state.
    experimental command setIdleOverride
      parameters
-```
-
-## Roll protocol to r1209236 — _2023-10-13T04:26:43.000Z_
-######  Diff: [`25e67ec...a60ce47`](https://github.com/ChromeDevTools/devtools-protocol/compare/25e67ec...a60ce47)
-
-```diff
-@@ browser_protocol.pdl:7111 @@ experimental domain Overlay
-       # The content box highlight outline color (default: transparent).
-       optional DOM.RGBA outlineColor
- 
-+  # Configuration for Window Controls Overlay
-+  type WindowControlsOverlayConfig extends object
-+    properties
-+      # Whether the title bar CSS should be shown when emulating the Window Controls Overlay.
-+      boolean showCSS
-+      # Seleted platforms to show the overlay.
-+      string selectedPlatform
-+      # The theme color defined in app manifest.
-+      string themeColor
-+
-   type ContainerQueryHighlightConfig extends object
-     properties
-       # A descriptor for the highlight appearance of container query containers.
-@@ -7361,6 +7371,12 @@ experimental domain Overlay
-       # An array of node identifiers and descriptors for the highlight appearance.
-       array of IsolatedElementHighlightConfig isolatedElementHighlightConfigs
- 
-+  # Show Window Controls Overlay for PWA
-+  command setShowWindowControlsOverlay
-+    parameters
-+      # Window Controls Overlay data, null means hide Window Controls Overlay
-+      optional WindowControlsOverlayConfig windowControlsOverlayConfig
-+
-   # Fired when the node should be inspected. This happens after call to `setInspectMode` or when
-   # user manually inspects an element.
-   event inspectNodeRequested
 ```
